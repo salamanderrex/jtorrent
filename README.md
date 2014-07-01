@@ -1,7 +1,7 @@
 jtorrent
 ========
 
-This is a project for ve489
+This is a final project for ve489
 
 
 uasge

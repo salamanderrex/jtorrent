@@ -6,6 +6,7 @@
 #include "sha1.h"
 #include "send.h"
 //testgitagain
+//ZHANG
 //usage: ./create_torrent <FILE> <torrent FILE> <IP>
 using namespace std;
 int BLOCK = 4096*1024;

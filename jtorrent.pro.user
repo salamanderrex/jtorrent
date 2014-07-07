@@ -1,249 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
+<!-- Written by QtCreator 2.7.0, 2014-07-07T14:14:08. -->
 <qtcreator>
  <data>
-  <variable>RunConfiguration0-BaseEnvironmentBase</variable>
-  <value type="int">2</value>
+  <variable>ProjectExplorer.Project.ActiveTarget</variable>
+  <value type="int">-1</value>
  </data>
  <data>
-  <variable>RunConfiguration0-CommandLineArguments</variable>
-  <valuelist type="QVariantList"/>
+  <variable>ProjectExplorer.Project.EditorSettings</variable>
+  <valuemap type="QVariantMap">
+   <value type="bool" key="EditorConfiguration.AutoIndent">true</value>
+   <value type="bool" key="EditorConfiguration.AutoSpacesForTabs">false</value>
+   <value type="bool" key="EditorConfiguration.CamelCaseNavigation">true</value>
+   <valuemap type="QVariantMap" key="EditorConfiguration.CodeStyle.0">
+    <value type="QByteArray" key="language">Cpp</value>
+    <valuemap type="QVariantMap" key="value">
+     <value type="QString" key="CurrentPreferences">CppGlobal</value>
+    </valuemap>
+   </valuemap>
+   <valuemap type="QVariantMap" key="EditorConfiguration.CodeStyle.1">
+    <value type="QByteArray" key="language">QmlJS</value>
+    <valuemap type="QVariantMap" key="value">
+     <value type="QString" key="CurrentPreferences">QmlJSGlobal</value>
+    </valuemap>
+   </valuemap>
+   <value type="int" key="EditorConfiguration.CodeStyle.Count">2</value>
+   <value type="QByteArray" key="EditorConfiguration.Codec">UTF-8</value>
+   <value type="bool" key="EditorConfiguration.ConstrainTooltips">false</value>
+   <value type="int" key="EditorConfiguration.IndentSize">4</value>
+   <value type="bool" key="EditorConfiguration.KeyboardTooltips">false</value>
+   <value type="bool" key="EditorConfiguration.MouseNavigation">true</value>
+   <value type="int" key="EditorConfiguration.PaddingMode">1</value>
+   <value type="bool" key="EditorConfiguration.ScrollWheelZooming">true</value>
+   <value type="int" key="EditorConfiguration.SmartBackspaceBehavior">0</value>
+   <value type="bool" key="EditorConfiguration.SpacesForTabs">true</value>
+   <value type="int" key="EditorConfiguration.TabKeyBehavior">0</value>
+   <value type="int" key="EditorConfiguration.TabSize">8</value>
+   <value type="bool" key="EditorConfiguration.UseGlobal">true</value>
+   <value type="int" key="EditorConfiguration.Utf8BomBehavior">1</value>
+   <value type="bool" key="EditorConfiguration.addFinalNewLine">true</value>
+   <value type="bool" key="EditorConfiguration.cleanIndentation">true</value>
+   <value type="bool" key="EditorConfiguration.cleanWhitespace">true</value>
+   <value type="bool" key="EditorConfiguration.inEntireDocument">false</value>
+  </valuemap>
  </data>
  <data>
-  <variable>RunConfiguration0-ProFile</variable>
-  <value type="QString">jtorrent.pro</value>
+  <variable>ProjectExplorer.Project.PluginSettings</variable>
+  <valuemap type="QVariantMap"/>
  </data>
  <data>
-  <variable>RunConfiguration0-RunConfiguration.name</variable>
-  <value type="QString">jtorrent</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UseDyldImageSuffix</variable>
-  <value type="bool">false</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UseTerminal</variable>
-  <value type="bool">false</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UserEnvironmentChanges</variable>
-  <valuelist type="QVariantList"/>
- </data>
- <data>
-  <variable>RunConfiguration0-UserSetName</variable>
-  <value type="bool">false</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UserSetWorkingDirectory</variable>
-  <value type="bool">false</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UserWorkingDirectory</variable>
-  <value type="QString"></value>
- </data>
- <data>
-  <variable>RunConfiguration0-type</variable>
-  <value type="QString">Qt4ProjectManager.Qt4RunConfiguration</value>
- </data>
- <data>
-  <variable>activeRunConfiguration</variable>
+  <variable>ProjectExplorer.Project.TargetCount</variable>
   <value type="int">0</value>
  </data>
  <data>
-  <variable>activebuildconfiguration</variable>
-  <value type="QString">Debug</value>
+  <variable>ProjectExplorer.Project.Updater.EnvironmentId</variable>
+  <value type="QString">{930799ac-8bc3-4547-9607-010c770412bb}</value>
  </data>
  <data>
-  <variable>buildConfiguration-Debug</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-   <value key="QtVersionId" type="int">0</value>
-   <value key="ToolChain" type="int">0</value>
-   <value key="addQDumper" type=""></value>
-   <value key="buildConfiguration" type="int">2</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildConfiguration-Release</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-   <value key="QtVersionId" type="int">0</value>
-   <value key="addQDumper" type=""></value>
-   <value key="buildConfiguration" type="int">0</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Debug-buildstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-   <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-2crgOXaYEo,guid=5715d76cb09526daae7e1d6153b2aa37</value>
-    <value type="QString">DEFAULTS_PATH=/usr/share/gconf/gnome.default.path</value>
-    <value type="QString">DESKTOP_SESSION=gnome</value>
-    <value type="QString">DISPLAY=:0.0</value>
-    <value type="QString">GDMSESSION=gnome</value>
-    <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
-    <value type="QString">GDM_LANG=en_US.utf8</value>
-    <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-q8yt9t</value>
-    <value type="QString">GNOME_KEYRING_PID=3817</value>
-    <value type="QString">GTK_MODULES=canberra-gtk-module</value>
-    <value type="QString">HOME=/home/openwrt</value>
-    <value type="QString">LANG=en_US.utf8</value>
-    <value type="QString">LANGUAGE=zh:en</value>
-    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator</value>
-    <value type="QString">LOGNAME=openwrt</value>
-    <value type="QString">MANDATORY_PATH=/usr/share/gconf/gnome.mandatory.path</value>
-    <value type="QString">ORBIT_SOCKETDIR=/tmp/orbit-openwrt</value>
-    <value type="QString">PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/openwrt/trunk/trunk/bin/ar71xx/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/toolchain-mips_r2_gcc-4.6-linaro_uClibc-0.9.33.2/bin</value>
-    <value type="QString">PWD=/home/openwrt</value>
-    <value type="QString">QTDIR=/usr/share/qt4</value>
-    <value type="QString">SESSION_MANAGER=local/rex-laptop:@/tmp/.ICE-unix/3836,unix/rex-laptop:/tmp/.ICE-unix/3836</value>
-    <value type="QString">SHELL=/bin/bash</value>
-    <value type="QString">SPEECHD_PORT=6560</value>
-    <value type="QString">SSH_AGENT_PID=3870</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-q8yt9t/ssh</value>
-    <value type="QString">STAGING_DIR=/home/openwrt/trunk/trunk/bin/ar71xx/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/</value>
-    <value type="QString">USER=openwrt</value>
-    <value type="QString">USERNAME=openwrt</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-openwrt-qCWMPh/database</value>
-    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
-    <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=78d3aac5a84e01d2f510f93a5137605a-1404217911.370974-493004731</value>
-   </valuelist>
-   <valuelist key="abstractProcess.arguments" type="QVariantList">
-    <value type="QString">/home/openwrt/salamanderrex-jtorrent/jtorrent.pro</value>
-    <value type="QString">-spec</value>
-    <value type="QString">linux-g++</value>
-    <value type="QString">-r</value>
-    <value type="QString">CONFIG+=debug</value>
-   </valuelist>
-   <value key="abstractProcess.command" type="QString">/usr/bin/qmake-qt4</value>
-   <value key="abstractProcess.enabled" type="bool">true</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/openwrt/salamanderrex-jtorrent</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Debug-buildstep1</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-   <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-2crgOXaYEo,guid=5715d76cb09526daae7e1d6153b2aa37</value>
-    <value type="QString">DEFAULTS_PATH=/usr/share/gconf/gnome.default.path</value>
-    <value type="QString">DESKTOP_SESSION=gnome</value>
-    <value type="QString">DISPLAY=:0.0</value>
-    <value type="QString">GDMSESSION=gnome</value>
-    <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
-    <value type="QString">GDM_LANG=en_US.utf8</value>
-    <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-q8yt9t</value>
-    <value type="QString">GNOME_KEYRING_PID=3817</value>
-    <value type="QString">GTK_MODULES=canberra-gtk-module</value>
-    <value type="QString">HOME=/home/openwrt</value>
-    <value type="QString">LANG=en_US.utf8</value>
-    <value type="QString">LANGUAGE=zh:en</value>
-    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator</value>
-    <value type="QString">LOGNAME=openwrt</value>
-    <value type="QString">MANDATORY_PATH=/usr/share/gconf/gnome.mandatory.path</value>
-    <value type="QString">ORBIT_SOCKETDIR=/tmp/orbit-openwrt</value>
-    <value type="QString">PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/openwrt/trunk/trunk/bin/ar71xx/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/toolchain-mips_r2_gcc-4.6-linaro_uClibc-0.9.33.2/bin</value>
-    <value type="QString">PWD=/home/openwrt</value>
-    <value type="QString">QTDIR=/usr/share/qt4</value>
-    <value type="QString">SESSION_MANAGER=local/rex-laptop:@/tmp/.ICE-unix/3836,unix/rex-laptop:/tmp/.ICE-unix/3836</value>
-    <value type="QString">SHELL=/bin/bash</value>
-    <value type="QString">SPEECHD_PORT=6560</value>
-    <value type="QString">SSH_AGENT_PID=3870</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-q8yt9t/ssh</value>
-    <value type="QString">STAGING_DIR=/home/openwrt/trunk/trunk/bin/ar71xx/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/</value>
-    <value type="QString">USER=openwrt</value>
-    <value type="QString">USERNAME=openwrt</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-openwrt-qCWMPh/database</value>
-    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
-    <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=78d3aac5a84e01d2f510f93a5137605a-1404217911.370974-493004731</value>
-   </valuelist>
-   <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
-   <valuelist key="abstractProcess.arguments" type="QVariantList">
-    <value type="QString">-w</value>
-   </valuelist>
-   <value key="abstractProcess.command" type="QString">/usr/bin/make</value>
-   <value key="abstractProcess.enabled" type="bool">true</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/openwrt/salamanderrex-jtorrent</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Debug-cleanstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-   <value key="cleanConfig" type="bool">true</value>
-   <valuelist key="makeargs" type="QVariantList">
-    <value type="QString">clean</value>
-   </valuelist>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Release-buildstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Release-buildstep1</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Release-cleanstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfigurations</variable>
-  <valuelist type="QVariantList">
-   <value type="QString">Debug</value>
-   <value type="QString">Release</value>
-  </valuelist>
- </data>
- <data>
-  <variable>buildstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
-   <value key="mkspec" type="QString"></value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildstep1</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildsteps</variable>
-  <valuelist type="QVariantList">
-   <value type="QString">trolltech.qt4projectmanager.qmake</value>
-   <value type="QString">trolltech.qt4projectmanager.make</value>
-  </valuelist>
- </data>
- <data>
-  <variable>cleanstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
-   <value key="clean" type="bool">true</value>
-  </valuemap>
- </data>
- <data>
-  <variable>cleansteps</variable>
-  <valuelist type="QVariantList">
-   <value type="QString">trolltech.qt4projectmanager.make</value>
-  </valuelist>
- </data>
- <data>
-  <variable>defaultFileEncoding</variable>
-  <value type="QByteArray">System</value>
- </data>
- <data>
-  <variable>project</variable>
-  <valuemap type="QVariantMap"/>
+  <variable>ProjectExplorer.Project.Updater.FileVersion</variable>
+  <value type="int">12</value>
  </data>
 </qtcreator>

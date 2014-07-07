@@ -1,3 +1,4 @@
+/*
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -22,6 +23,7 @@ int main(int argc, char* argv[]){
     printf("listenfd: %d,waiting...\n",listenfd);
     connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
     /*打开二进制文件*/
+    /*
     FILE* fp = NULL;
     fp = fopen(argv[1], "ab");
     if (fp == NULL) printf("open binary file failed\n");
@@ -43,3 +45,4 @@ int main(int argc, char* argv[]){
     close(connfd);
     close(listenfd);
 }
+*/

@@ -26,6 +26,10 @@ int send(char* str1, char* str2){
     int count = 0;
     
     //每次发送4KB数据给服务器
+     int len;
+    //new
+    char* file_name=str1;
+     len=send(sockfd, file_name, strlen(file_name)-1, 0);
     while(!feof(fp)){
         ret = fread(buffer,1,4096,fp);
         if (ret == 0) printf("fread fault\n");

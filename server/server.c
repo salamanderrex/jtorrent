@@ -6,6 +6,7 @@
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include<unistd.h>
+
 int main(int argc, char* argv[]){
     int listenfd,connfd;
     int n;
@@ -27,13 +28,18 @@ int main(int argc, char* argv[]){
     int ret;
     int count = 0;
     
-    //while(1){
-        n = recv(connfd, buff, 4096,0);	//n是实际复制的字节数
-       // if (n == 0) break;
-        fwrite(buff,1,n,fp);	//每次写入1个字节，一共写入n个字节
-	count++;
-    //}
+    while(1){
+        //printf("accept begin\n");
+        
+        //printf("accept ok\n");
+        n = recv(connfd, buff, 4096,0);
+        if (n == 0) break;
+        //printf("ddd\n");
+        //printf("recv ok\n");
+        //buff[n];
+        //printf("connfd: recv msg from client\n");
+        fwrite(buff,1,n,fp);
+    }
     close(connfd);
     close(listenfd);
-	printf("count = %d", count);
 }

@@ -7,4 +7,7 @@ SOURCES += sha1.cpp \
     server/client.c \
     send_avi/server.c \
     send_avi/client.c
-OTHER_FILES += README.md
+OTHER_FILES += README.md \
+    testcase/torrentfile \
+    testcase/rawfile.avi \
+    testcase/1.png

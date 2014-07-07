@@ -143,14 +143,14 @@ int main(int argc, char** argv)
                         {
     printf("received data:%s\n from %s\n",buf,inet_ntoa(client[i].addr.sin_addr));
 
-    //test multi thread , know the name before
-    /*
+/*
         FILE* fp = NULL;
         fp = fopen(argv[1], "ab");
         if (fp == NULL) printf("open binary file failed\n");
 
      fwrite(buf,1,n,fp);
      */
+
                         }
                         else
                         {

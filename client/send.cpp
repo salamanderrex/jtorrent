@@ -12,7 +12,7 @@ int send(char* str1, char* str2){
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port= htons(6666);
+    servaddr.sin_port= htons(1234);
     inet_pton(AF_INET, str2, &servaddr.sin_addr);
     printf("send msg to server: \n");
     connect(sockfd, (struct sockaddr*)&servaddr,sizeof(servaddr));
@@ -26,6 +26,10 @@ int send(char* str1, char* str2){
     int count = 0;
     
     //每次发送4KB数据给服务器
+     int len;
+    //new
+    char* file_name=str1;
+     len=send(sockfd, file_name, strlen(file_name), 0);
     while(!feof(fp)){
         ret = fread(buffer,1,4096,fp);
         if (ret == 0) printf("fread fault\n");

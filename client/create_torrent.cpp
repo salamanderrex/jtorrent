@@ -53,13 +53,6 @@ int main(int argc, char* argv[]){
         sha1->addBytes(buffer, ret);
         digest = sha1->getDigest();
         hexPrinter(digest,10, torrent);
-        //cout << endl;
-        //sprintf(b, "%d", count);
-        //s = a + b;
-        //schar = s.c_str();
-        //temp = fopen(schar,"ab");
-        //fwrite(buffer,1,ret,temp);
-        //count ++;
         size += ret;
     }
     delete sha1;

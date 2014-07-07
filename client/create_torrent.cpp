@@ -3,11 +3,17 @@
 #include <string>
 #include <unistd.h>
 #include <iostream>
+#include <fstream>
 #include "sha1.h"
 #include "send.h"
-//testgitagain
-//ZHANGzzzfdsfdsf
-//usage: ./create_torrent <FILE> <torrent FILE> <IP>
+
+//Zhang
+//usage: ./create_torrent <configuration file>
+/*format of configuration file
+  file
+  torrent file
+  IP
+  */
 using namespace std;
 int BLOCK = 4096*1024;
 void hexPrinter( unsigned char* c, int l, FILE* torrent )
@@ -22,11 +28,14 @@ void hexPrinter( unsigned char* c, int l, FILE* torrent )
 }
 int main(int argc, char* argv[]){
     char buffer[BLOCK];
+    fstream conf_file(argv[1]);
     FILE *fp, *temp, *torrent;
-    fp = fopen(argv[1], "rb");
-    torrent = fopen(argv[2], "w");
-    fclose(torrent);
-    torrent = fopen(argv[2], "a");
+    char file[100], torrent_file[100], IP[100];
+    conf_file >> file;
+    conf_file >> torrent_file;
+    conf_file >> IP;
+    fp = fopen(file, "rb");
+    torrent = fopen(torrent_file, "a");
     int count = 1;
     int size = 0;
     int ret;
@@ -57,7 +66,7 @@ int main(int argc, char* argv[]){
     }
     delete sha1;
     free(digest);
-    fprintf(torrent, "%s\n", argv[3]);
+    fprintf(torrent, "%s\n", IP);
     fclose(torrent);
-    send(argv[2], argv[3]);
+    send(torrent_file, IP);
 }

@@ -1,3 +1,17 @@
+###############
+#    folder   #
+###############
+/build-jtorrent-Desktop-Debug/
+/build-jtorrent_server-Desktop-Debug/
+
+################
+# pro.user #####
+################
+
+*.pro.user
+*.pro.user.*
+
+###################
 # Compiled source #
 ###################
 *.com

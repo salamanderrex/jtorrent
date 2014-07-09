@@ -56,27 +56,12 @@
   <variable>buildConfiguration-Debug</variable>
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-<<<<<<< HEAD
    <value key="QtVersionId" type="int">2</value>
-=======
-   <value key="QtVersionId" type="int">0</value>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
    <value key="ToolChain" type="int">0</value>
    <value key="buildConfiguration" type="int">2</value>
   </valuemap>
  </data>
  <data>
-<<<<<<< HEAD
-=======
-  <variable>buildConfiguration-Release</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-   <value key="QtVersionId" type="int">0</value>
-   <value key="buildConfiguration" type="int">0</value>
-  </valuemap>
- </data>
- <data>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
   <variable>buildconfiguration-Debug-buildstep0</variable>
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
@@ -99,34 +84,9 @@
   </valuemap>
  </data>
  <data>
-<<<<<<< HEAD
   <variable>buildconfigurations</variable>
   <valuelist type="QVariantList">
    <value type="QString">Debug</value>
-=======
-  <variable>buildconfiguration-Release-buildstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Release-buildstep1</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Release-cleanstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfigurations</variable>
-  <valuelist type="QVariantList">
-   <value type="QString">Debug</value>
-   <value type="QString">Release</value>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
   </valuelist>
  </data>
  <data>
@@ -141,7 +101,6 @@
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
   </valuemap>
-<<<<<<< HEAD
  </data>
  <data>
   <variable>buildsteps</variable>
@@ -151,17 +110,6 @@
   </valuelist>
  </data>
  <data>
-=======
- </data>
- <data>
-  <variable>buildsteps</variable>
-  <valuelist type="QVariantList">
-   <value type="QString">trolltech.qt4projectmanager.qmake</value>
-   <value type="QString">trolltech.qt4projectmanager.make</value>
-  </valuelist>
- </data>
- <data>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
   <variable>cleanstep0</variable>
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>

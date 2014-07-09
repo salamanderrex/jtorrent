@@ -6,15 +6,7 @@
  </data>
  <data>
   <variable>RunConfiguration0-CommandLineArguments</variable>
-<<<<<<< HEAD
-  <valuelist type="QVariantList">
-   <value type="QString">../testcase/rawfile.avi</value>
-   <value type="QString">../testcase/out.torrent</value>
-   <value type="QString">127.0.0.1</value>
-  </valuelist>
-=======
   <valuelist type="QVariantList"/>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
  </data>
  <data>
   <variable>RunConfiguration0-ProFile</variable>
@@ -64,175 +56,22 @@
   <variable>buildConfiguration-Debug</variable>
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-<<<<<<< HEAD
    <value key="QtVersionId" type="int">2</value>
-=======
-   <value key="QtVersionId" type="int">0</value>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
    <value key="ToolChain" type="int">0</value>
+   <value key="addQDumper" type=""></value>
    <value key="buildConfiguration" type="int">2</value>
   </valuemap>
  </data>
  <data>
-<<<<<<< HEAD
-=======
-  <variable>buildConfiguration-Release</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-   <value key="QtVersionId" type="int">0</value>
-   <value key="buildConfiguration" type="int">0</value>
-  </valuemap>
- </data>
- <data>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
   <variable>buildconfiguration-Debug-buildstep0</variable>
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-   <valuelist key="abstractProcess.Environment" type="QVariantList">
-<<<<<<< HEAD
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-fO0yEgZ2lM,guid=e19a50f525dc1c86c8d0d87553ba9078</value>
-=======
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-ciW2qvRV2B,guid=dae28e533cfbc30af030d5b853ba3c37</value>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
-    <value type="QString">DEFAULTS_PATH=/usr/share/gconf/gnome.default.path</value>
-    <value type="QString">DESKTOP_SESSION=gnome</value>
-    <value type="QString">DISPLAY=:0.0</value>
-    <value type="QString">GDMSESSION=gnome</value>
-    <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
-    <value type="QString">GDM_LANG=en_US.utf8</value>
-    <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-<<<<<<< HEAD
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-bKTpxU</value>
-    <value type="QString">GNOME_KEYRING_PID=1236</value>
-=======
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-qpRjtd</value>
-    <value type="QString">GNOME_KEYRING_PID=1298</value>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
-    <value type="QString">GTK_MODULES=canberra-gtk-module</value>
-    <value type="QString">HOME=/home/openwrt</value>
-    <value type="QString">LANG=en_US.utf8</value>
-    <value type="QString">LANGUAGE=zh:en</value>
-    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator</value>
-    <value type="QString">LOGNAME=openwrt</value>
-    <value type="QString">MANDATORY_PATH=/usr/share/gconf/gnome.mandatory.path</value>
-    <value type="QString">ORBIT_SOCKETDIR=/tmp/orbit-openwrt</value>
-    <value type="QString">PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/openwrt/trunk/trunk/bin/ar71xx/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/toolchain-mips_r2_gcc-4.6-linaro_uClibc-0.9.33.2/bin</value>
-    <value type="QString">PWD=/home/openwrt</value>
-    <value type="QString">QTDIR=/usr/share/qt4</value>
-<<<<<<< HEAD
-    <value type="QString">SESSION_MANAGER=local/rex-laptop:@/tmp/.ICE-unix/1254,unix/rex-laptop:/tmp/.ICE-unix/1254</value>
-    <value type="QString">SHELL=/bin/bash</value>
-    <value type="QString">SPEECHD_PORT=6560</value>
-    <value type="QString">SSH_AGENT_PID=1288</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-bKTpxU/ssh</value>
-    <value type="QString">STAGING_DIR=/home/openwrt/trunk/trunk/bin/ar71xx/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/</value>
-    <value type="QString">USER=openwrt</value>
-    <value type="QString">USERNAME=openwrt</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-openwrt-I9uHD9/database</value>
-    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
-    <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=78d3aac5a84e01d2f510f93a5137605a-1404735607.729282-476483197</value>
-=======
-    <value type="QString">SESSION_MANAGER=local/rex-laptop:@/tmp/.ICE-unix/1316,unix/rex-laptop:/tmp/.ICE-unix/1316</value>
-    <value type="QString">SHELL=/bin/bash</value>
-    <value type="QString">SPEECHD_PORT=6560</value>
-    <value type="QString">SSH_AGENT_PID=1350</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-qpRjtd/ssh</value>
-    <value type="QString">STAGING_DIR=/home/openwrt/trunk/trunk/bin/ar71xx/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/</value>
-    <value type="QString">USER=openwrt</value>
-    <value type="QString">USERNAME=openwrt</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-openwrt-VmUNrV/database</value>
-    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
-    <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=78d3aac5a84e01d2f510f93a5137605a-1404714038.990769-605831731</value>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
-   </valuelist>
-   <valuelist key="abstractProcess.arguments" type="QVariantList">
-    <value type="QString">/home/openwrt/ve489team1/jtorrent/client/jtorrent.pro</value>
-    <value type="QString">-spec</value>
-    <value type="QString">linux-g++</value>
-    <value type="QString">-r</value>
-    <value type="QString">CONFIG+=debug</value>
-   </valuelist>
-   <value key="abstractProcess.command" type="QString">/usr/bin/qmake-qt4</value>
-<<<<<<< HEAD
-   <value key="abstractProcess.enabled" type="bool">false</value>
-=======
-   <value key="abstractProcess.enabled" type="bool">true</value>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
-   <value key="abstractProcess.workingDirectory" type="QString">/home/openwrt/ve489team1/jtorrent/client</value>
   </valuemap>
  </data>
  <data>
   <variable>buildconfiguration-Debug-buildstep1</variable>
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
-   <valuelist key="abstractProcess.Environment" type="QVariantList">
-<<<<<<< HEAD
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-fO0yEgZ2lM,guid=e19a50f525dc1c86c8d0d87553ba9078</value>
-=======
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-ciW2qvRV2B,guid=dae28e533cfbc30af030d5b853ba3c37</value>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
-    <value type="QString">DEFAULTS_PATH=/usr/share/gconf/gnome.default.path</value>
-    <value type="QString">DESKTOP_SESSION=gnome</value>
-    <value type="QString">DISPLAY=:0.0</value>
-    <value type="QString">GDMSESSION=gnome</value>
-    <value type="QString">GDM_KEYBOARD_LAYOUT=us</value>
-    <value type="QString">GDM_LANG=en_US.utf8</value>
-    <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-<<<<<<< HEAD
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-bKTpxU</value>
-    <value type="QString">GNOME_KEYRING_PID=1236</value>
-=======
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-qpRjtd</value>
-    <value type="QString">GNOME_KEYRING_PID=1298</value>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
-    <value type="QString">GTK_MODULES=canberra-gtk-module</value>
-    <value type="QString">HOME=/home/openwrt</value>
-    <value type="QString">LANG=en_US.utf8</value>
-    <value type="QString">LANGUAGE=zh:en</value>
-    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator</value>
-    <value type="QString">LOGNAME=openwrt</value>
-    <value type="QString">MANDATORY_PATH=/usr/share/gconf/gnome.mandatory.path</value>
-    <value type="QString">ORBIT_SOCKETDIR=/tmp/orbit-openwrt</value>
-    <value type="QString">PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/openwrt/trunk/trunk/bin/ar71xx/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/toolchain-mips_r2_gcc-4.6-linaro_uClibc-0.9.33.2/bin</value>
-    <value type="QString">PWD=/home/openwrt</value>
-    <value type="QString">QTDIR=/usr/share/qt4</value>
-<<<<<<< HEAD
-    <value type="QString">SESSION_MANAGER=local/rex-laptop:@/tmp/.ICE-unix/1254,unix/rex-laptop:/tmp/.ICE-unix/1254</value>
-    <value type="QString">SHELL=/bin/bash</value>
-    <value type="QString">SPEECHD_PORT=6560</value>
-    <value type="QString">SSH_AGENT_PID=1288</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-bKTpxU/ssh</value>
-    <value type="QString">STAGING_DIR=/home/openwrt/trunk/trunk/bin/ar71xx/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/</value>
-    <value type="QString">USER=openwrt</value>
-    <value type="QString">USERNAME=openwrt</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-openwrt-I9uHD9/database</value>
-    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
-    <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=78d3aac5a84e01d2f510f93a5137605a-1404735607.729282-476483197</value>
-=======
-    <value type="QString">SESSION_MANAGER=local/rex-laptop:@/tmp/.ICE-unix/1316,unix/rex-laptop:/tmp/.ICE-unix/1316</value>
-    <value type="QString">SHELL=/bin/bash</value>
-    <value type="QString">SPEECHD_PORT=6560</value>
-    <value type="QString">SSH_AGENT_PID=1350</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-qpRjtd/ssh</value>
-    <value type="QString">STAGING_DIR=/home/openwrt/trunk/trunk/bin/ar71xx/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/</value>
-    <value type="QString">USER=openwrt</value>
-    <value type="QString">USERNAME=openwrt</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-openwrt-VmUNrV/database</value>
-    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
-    <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=78d3aac5a84e01d2f510f93a5137605a-1404714038.990769-605831731</value>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
-   </valuelist>
-   <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
-   <valuelist key="abstractProcess.arguments" type="QVariantList">
-    <value type="QString">-w</value>
-   </valuelist>
-   <value key="abstractProcess.command" type="QString">/usr/bin/make</value>
-   <value key="abstractProcess.enabled" type="bool">true</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/openwrt/ve489team1/jtorrent/client</value>
   </valuemap>
  </data>
  <data>
@@ -246,34 +85,9 @@
   </valuemap>
  </data>
  <data>
-<<<<<<< HEAD
   <variable>buildconfigurations</variable>
   <valuelist type="QVariantList">
    <value type="QString">Debug</value>
-=======
-  <variable>buildconfiguration-Release-buildstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Release-buildstep1</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Release-cleanstep0</variable>
-  <valuemap type="QVariantMap">
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfigurations</variable>
-  <valuelist type="QVariantList">
-   <value type="QString">Debug</value>
-   <value type="QString">Release</value>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
   </valuelist>
  </data>
  <data>
@@ -288,7 +102,6 @@
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
   </valuemap>
-<<<<<<< HEAD
  </data>
  <data>
   <variable>buildsteps</variable>
@@ -298,17 +111,6 @@
   </valuelist>
  </data>
  <data>
-=======
- </data>
- <data>
-  <variable>buildsteps</variable>
-  <valuelist type="QVariantList">
-   <value type="QString">trolltech.qt4projectmanager.qmake</value>
-   <value type="QString">trolltech.qt4projectmanager.make</value>
-  </valuelist>
- </data>
- <data>
->>>>>>> f5d05f90c6f62cb21720dc72532e51a5b479c913
   <variable>cleanstep0</variable>
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>

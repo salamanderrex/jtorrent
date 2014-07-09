@@ -1,0 +1,63 @@
+===================================================================================
+==========		this file was created by jtorrent team1 	===========
+==========		copyright belongs to UMJI_VE489_2014_TEAM1	===========
+==========		Last modified date: 2014_7_9			===========
+===================================================================================
+#CLIENT
+steps:
+1. initialize the current upload torrent file (i.e. read the local.conf and local_torrent_list.list) , keep it in the uploading_torrent_list
+
+2.enter the main panel 
+
+=====================================
+torrent main panel
+=====================================
+hello user : username
+1.create a torrent file
+2.upload the torrent file to the server
+3.get the torrent list from the server
+4.get the torrent you want from server
+5.start downloading file for specific torrent file.
+6.show the torrent file in local 
+7.check the connection status 
+8.exit
+========================================
+ 
+
+1.create a torrent file:(store in the ./torrents)
+
+create a torrent file in local by SHA a local raw file, it generate the 
+raw_file.avi	=>	raw_file.avi.torrent 
+			raw_file.avi.torrent.config
+
+and it will add it to the local_torrent_list.list
+(check the style in the sample)
+
+2.upload the torrent file to the server
+uplaod the torrent file to server
+should prompt the success or not
+
+3.get the torrent list from the server
+fetch the torrent list
+
+4.get the torrent you want from server
+just wait user to input a choosen number
+should prompt the success or not
+also create a *.torrent.peer_list.list
+also upate the info local_torrent_list.list
+
+5.start downloading file for specific torrent file
+enter the location of the *.torrent file and it will read the *.torrent.peer_list.list to start connecting and fetching
+
+6.show the torrent file in local 
+
+show all the torrent file in ./torrents and their status
+
+7.check the connection status 
+check connection status, can show what is downloadind what is uploading is better
+
+8.exit 
+exit, but it will not work.(because when download then suddenly exit may cause problem)
+
+
+ 

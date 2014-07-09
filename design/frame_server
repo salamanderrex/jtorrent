@@ -1,0 +1,34 @@
+===================================================================================
+==========		this file was created by jtorrent team1 	===========
+==========		copyright belongs to UMJI_VE489_2014_TEAM1	===========
+==========		Last modified date: 2014_7_9			===========
+===================================================================================
+#server
+
+steps:
+1. initialize the current upload torrent file (i.e. read the local.conf and local_torrent_list.list) , keep it in the uploading_torrent_list
+
+2.enter the main panel 
+
+=====================================
+torrent main panel
+=====================================
+hello user : username
+1.check current torrent list
+2.check specific torrent peer list
+3.check connection status
+4.exit
+========================================
+ 
+
+1.check current torrent list
+
+2.check specific torrent peer list
+
+3.check connection status
+
+4.exit 
+exit, but it will not work.(because when download then suddenly exit may cause problem)
+
+
+ 

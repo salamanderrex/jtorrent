@@ -1,0 +1,10 @@
+===================================================================================
+==========		this file was created by jtorrent team1 	===========
+==========		copyright belongs to UMJI_VE489_2014_TEAM1	===========
+==========		Last modified date: 2014_7_9			===========
+===================================================================================
+
+#this file is about the communcation rule
+#include C_R.h in lib file
+
+date change start with the STX_FLAG ETX_FLAG

@@ -48,5 +48,6 @@ STX_FLAG
 EDX_FLAG	
 
 in condensed mode
-$~{"reponse_type":21,"parameters":[{"torrent_name":"raw_avi.torrent"},{"torrent_ack":true}]}~$
+$~{"reponse_type":21,
+"parameters":[{"torrent_name":"raw_avi.torrent"},{"torrent_ack":true}]}~$
 

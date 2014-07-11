@@ -3,6 +3,9 @@
 ###############
 /build-jtorrent-Desktop-Debug/
 /build-jtorrent_server-Desktop-Debug/
+/qtc_packaging/
+/jtorrent_server-build-desktop-Qt_4_8_1_in_PATH__System__Debug/
+/*Debug/
 
 ################
 # pro.user #####
@@ -21,10 +24,10 @@
 *.o
 *.so
  
- #testcase#
- ############
- *.torrent
- *.avi
+#testcase#
+############
+*.torrent
+*.avi
  
 # Packages #
 ############

@@ -22,7 +22,7 @@
 *.dll
 *.exe
 *.o
-*.so
+
  
 #testcase#
 ############

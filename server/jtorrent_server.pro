@@ -8,4 +8,7 @@ INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include
 
 HEADERS += \
-    ../include/C_R.h
+    ../include/C_R.h \
+    ../include/Torrent.h \
+    ../include/Peer_list.h \
+    ../include/C_BASE.h

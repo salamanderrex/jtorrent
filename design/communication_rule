@@ -10,6 +10,8 @@
 date change start with the STX_FLAG EDX_FLAG
 
 1.upload the torrent file
+STEP 1:
+
 STX_FLAG
 {
 "request_type":12,
@@ -33,7 +35,7 @@ EDX_FLAG
 in another word, a condensed and real r_c mode
 $~{"request_type":12,"parameters":[{"torrent_name":"raw_avi.torrent"},{"torrent_SHA":"there_is_SHA_CHECK"},{"torrent_uploader":"zqu"},{"torrent_size":100}]}~$
 
-
+STEP2 :
 then server response 
 
 STX_FLAG
@@ -42,11 +44,20 @@ STX_FLAG
 "parameters":[
 {
 "torrent_ack":true
+},
+{
+"torrent_id":1
 }
 ]
 }
 EDX_FLAG	
 
 in condensed mode
-$~{"reponse_type":21,"parameters":[{"torrent_name":"raw_avi.torrent"},{"torrent_ack":true}]}~$
+$~{"reponse_type":21,"parameters":[{"torrent_name":"raw_avi.torrent"},{"torrent_ack":true},{"torrent_id":1}]}~$
+
+STEP3 :
+upload upload the binary stream
+
+
+
 

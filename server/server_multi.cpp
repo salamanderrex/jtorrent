@@ -13,7 +13,10 @@
 #include <sys/types.h>
 #include "json/json.h"
 #include "../include/C_R.h"
+#include "../include/Torrent.h"
+#include <fstream>
 #define MAXBUF 1024
+#define MAX_DATABUF 4096
 
 
 
@@ -24,6 +27,7 @@ typedef struct CLIENT {
 
 
 C_R_SERVER c_r_server;
+vector <T_TORRENT> torrents;
 /***************************
 **server for multi-client
 **PF_SETSIZE=1024
@@ -45,6 +49,7 @@ int main(int argc, char** argv)
     fd_set rset,allset;
 
     char buf[MAXBUF + 1];
+     char res_buf[MAXBUF + 1];
     CLIENT client[FD_SETSIZE];
 
     if(argv[1])
@@ -211,27 +216,39 @@ int main(int argc, char** argv)
                                 exit(-1);
                             }
                             int j_request_type=jroot["request_type"].asInt();
+
                             std::cout<<jroot["request_type"]<<std::endl;
 
 
                             if (j_request_type==CLIENT_REQUEST_TYPE.UPLOAD_TORRENT_INFO)
                                 //entering the upload mode
                             {
+                                T_TORRENT * up_loading_torrent=new T_TORRENT();
+                                up_loading_torrent->torrent_id=torrents.size()+1;
                                 std::cout<<"user want to upload a torrent server"<<std::endl;
                                 Json::Value parameters=jroot["parameters"];
                                 for(int i=0;i<parameters.size();i++)
                                 {
-                                    if(!parameters[i].isMember("torrent_name"))
-                                        continue;
-                                    else
+                                    if(parameters[i].isMember("torrent_name"))
+                                    {
+
+                                        up_loading_torrent->torrent_name=parameters[i]["torrent_name"].asString();
                                         std::cout<<"file name is"<< parameters[i]["torrent_name"].asString()<<std::endl;
+                                    }
+                                    else if(parameters[i].isMember("torrent_size"))
+                                    {
+                                        up_loading_torrent->torrent_size=parameters[i]["torrent_size"].asInt();
+                                        std::cout<<"file name is"<< parameters[i]["torrent_size"].asInt()<<std::endl;
+
+                                    }
                                 }
+
 
 
                                 //send response
 
-                                char res_buf[MAXBUF + 1];
-                                strcpy(res_buf,(c_r_server.generate_respose(SERVER_RESPONSE_TYPE.UPLOAD_TORRENT_INFO)).c_str());
+
+                                strcpy(res_buf,(c_r_server.generate_respose(SERVER_RESPONSE_TYPE.UPLOAD_TORRENT_INFO,up_loading_torrent)).c_str());
                                 std::cout<<"server response:"<<res_buf<<std::endl;
                                 int  len = send(sockfd, res_buf, strlen(res_buf) - 1, 0);
                                 if (len > 0)
@@ -240,7 +257,25 @@ int main(int argc, char** argv)
                                     printf("msg:'%s  failed!\n", res_buf);
                                 }
 
-                                    /*
+                                //wait for the uping the .torrent file
+                                char recv_data_buf[MAX_DATABUF+1];
+                                ofstream out_stream;
+                                out_stream.open(up_loading_torrent->torrent_name.c_str(),ios::binary);
+                                int recv_n;
+                                while(1)
+                                {
+                                    recv_n = recv(sockfd, recv_data_buf, MAX_DATABUF,0);
+                                      printf("received data:%s\n from %s\n",recv_data_buf,inet_ntoa(client[i].addr.sin_addr));
+                                                     std::cout<<"close out stream"<<std::endl;
+                                    if (recv_n == 0) break;
+                                     out_stream<<recv_data_buf;
+                                     out_stream.flush();
+                                }
+                                std::cout<<"close out stream"<<std::endl;
+                                out_stream.close();
+                                  std::cout<<"upload torrent file finished"<<std::endl;
+
+                                /*
           FILE* fp = NULL;
           fp = fopen(jroot["torrent_name"].asString().c_str(), "ab");
           if (fp == NULL) printf("open binary file failed\n");
@@ -261,23 +296,23 @@ int main(int argc, char** argv)
           }
           */
 
-                                }
-
-
-
-
                             }
-                            else
-                            {
-                                printf("disconnected by client!\n");
-                                close(sockfd);
-                                FD_CLR(sockfd,&allset);
-                                client[i].fd = -1;
-                            }
+
+
+
+
+                        }
+                        else
+                        {
+                            printf("disconnected by client!\n");
+                            close(sockfd);
+                            FD_CLR(sockfd,&allset);
+                            client[i].fd = -1;
                         }
                     }
                 }
             }
         }
-        close(slisten);
     }
+    close(slisten);
+}

@@ -2,7 +2,11 @@
 #define C_R_h
 #include <string>
 #include <iostream>
+#include "C_BASE.h";
+#include "Torrent.h"
+#include "json/json.h"
 using namespace std;
+
 class T_CLIENT_REQUEST_TYPE
 {
 public :
@@ -90,15 +94,36 @@ class C_R_SERVER :public C_R
 public:
         static const string TORRENT_LIST ;
         //others implement in the same way
-        string generate_respose(int type)
+
+        Json::FastWriter jwriter;
+
+        string generate_respose(int type, C_INFO_BASE * c_info_base)
         {
             string retrunstr;
+            Json::Value root;
+            Json::Value parameter;
+            Json::Value parameters;
+
             if(type==SERVER_RESPONSE_TYPE.UPLOAD_TORRENT_INFO)
             {
-                string json="{\"reponse_type\":21,\"parameters\":[{\"torrent_name\":\"raw_avi.torrent\"},{\"torrent_ack\":true}]}";
-                retrunstr=STX_FLAG+json+ETX_FLAG;
+                T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+               // string json="{\"reponse_type\":21,\"parameters\":[{\"torrent_name\":\"raw_avi.torrent\"},{\"torrent_ack\":true},{\"torrent_id\":1}}]}";
+                parameter["torrent_name"]=torrent->torrent_name;
+                parameter["torrent_id"]=torrent->torrent_id;
+                parameter["ack"]=true;
+                parameters.append(parameter);
+                root["reponse_type"]=type;
+                root["parameters"]=parameters;
+
             }
+          retrunstr= jwriter.write(root);
+            add_header_ender(retrunstr);
             return retrunstr;
+        }
+
+        void add_header_ender(string & inputstring)
+        {
+            inputstring = STX_FLAG+inputstring+ETX_FLAG;
         }
 
 

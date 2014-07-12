@@ -7,12 +7,19 @@
 /jtorrent_server-build-desktop-Qt_4_8_1_in_PATH__System__Debug/
 /*Debug/
 
+
+###############
+#temp files####
+###############
+*~
+*.~
 ################
 # pro.user #####
 ################
 
 *.pro.user
 *.pro.user.*
+
 
 ###################
 # Compiled source #

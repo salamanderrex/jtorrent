@@ -66,7 +66,7 @@ int main(int argc, char **argv)
                         printf("select error! %s", strerror(errno));                
                 break;  
                 } else if (retval == 0) {  
-                        //printf("no msg,no key, and continue to wait鈥︹€n");   
+                        //printf("no msg,no key, and continue to wait\n");   
                         continue;  
                     } else {  
                 if (FD_ISSET(0, &rfds))   
@@ -75,12 +75,12 @@ int main(int argc, char **argv)
                                 fgets(buf, MAXBUF, stdin);                
                                 if (!strncasecmp(buf, "quit", 4))   
                     {  
-                                    printf("request terminal chat锛乗n");  
+                                    printf("request terminal chat\n");  
                                     break;  
                                 }  
                                 len = send(sockfd, buf, strlen(buf) - 1, 0);  
                                 if (len > 0)  
-                                    printf("msg:%s send successful锛宼otalbytes: %d锛乗n", buf, len);  
+                                    printf("msg:%s send successful otalbytes: %d \n", buf, len);  
                                 else {  
                                     printf("msg:'%s  failed!\n", buf);  
                                     break;  
@@ -95,9 +95,9 @@ int main(int argc, char **argv)
                                 else    
                     {  
                         if (len < 0)   
-                                            printf("recv failed锛乪rrno:%d锛宔rror msg: '%s'\n", errno, strerror(errno));  
+                                            printf("recv failedrrno:%drror msg: '%s'\n", errno, strerror(errno));  
                                     else  
-                                            printf("other exit锛宼erminal chat\n");  
+                                            printf("other exiterminal chat\n");  
                                     break;  
                     }  
                             }                 

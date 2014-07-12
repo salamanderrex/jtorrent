@@ -13,10 +13,22 @@
 ###############
 *~
 *.~
+
+################
+# binary file###
+################
+server_multi
+server
+jtorrent_server
+client_multi
+mytest
+client
+jtorrent
+
 ################
 # pro.user #####
 ################
-
+DESKTOP_SESSION=gnome
 *.pro.user
 *.pro.user.*
 

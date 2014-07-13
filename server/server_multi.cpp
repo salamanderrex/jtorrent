@@ -27,7 +27,7 @@ typedef struct CLIENT {
 
 
 C_R_SERVER c_r_server;
-vector <T_TORRENT> torrents;
+vector <T_TORRENT *> torrents;
 /***************************
 **server for multi-client
 **PF_SETSIZE=1024
@@ -243,6 +243,7 @@ int main(int argc, char** argv)
                                     }
                                 }
 
+                                torrents.push_back(up_loading_torrent);
 
 
                                 //send response
@@ -298,6 +299,22 @@ int main(int argc, char** argv)
 
                             }
 
+                            //ask for torrent list
+
+                            else if(j_request_type==CLIENT_REQUEST_TYPE.TORRENT_LIST)
+                            {
+
+                                        //response
+                                memset(res_buf,NULL,sizeof(res_buf));
+                                strcpy(res_buf,(c_r_server.generate_respose(SERVER_RESPONSE_TYPE.TORRENT_LIST,torrents)).c_str());
+                                std::cout<<"server response:"<<res_buf<<std::endl;
+                                int  len = send(sockfd, res_buf, strlen(res_buf) - 1, 0);
+                                if (len > 0)
+                                    printf("msg:%s send successful锛宼otalbytes: %d锛乗n", res_buf, len);
+                                else {
+                                    printf("msg:'%s  failed!\n", res_buf);
+                                }
+                            }
 
 
 

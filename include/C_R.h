@@ -116,6 +116,38 @@ public:
                 root["parameters"]=parameters;
 
             }
+
+
+          retrunstr= jwriter.write(root);
+            add_header_ender(retrunstr);
+            return retrunstr;
+        }
+
+
+        string generate_respose(int type, vector <T_TORRENT *>  inputvector)
+        {
+            string retrunstr;
+            Json::Value root;
+            Json::Value parameter;
+            Json::Value parameters;
+
+            if(type==SERVER_RESPONSE_TYPE.TORRENT_LIST)
+            {
+                for(int i=0; i<inputvector.size();i++)
+                {
+                    T_TORRENT  * torrent=(T_TORRENT *) inputvector.at(i);
+                    parameter["torrent_name"]=torrent->torrent_name;
+                    parameter["torrent_id"]=torrent->torrent_id;
+                    parameters.append(parameter);
+                    root["reponse_type"]=type;
+                    root["parameters"]=parameters;
+
+
+                }
+
+            }
+
+
           retrunstr= jwriter.write(root);
             add_header_ender(retrunstr);
             return retrunstr;

@@ -59,5 +59,10 @@ STEP3 :
 upload upload the binary stream
 
 
+2.get the torrent list
+client
+$~{"request_type":15,"parameters":[]}~$
+
+
 
 

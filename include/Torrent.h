@@ -41,5 +41,5 @@ public:
     vector <T_TORRENT_PIECE> pieces;
     T_PEER_LIST * peer_list;    //does this need modify when we delete the torrent and its peer list?????
 };
-extern vector <T_TORRENT> torrents;
+extern vector <T_TORRENT *> torrents;
 #endif TORRENT_H

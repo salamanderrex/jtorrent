@@ -56,7 +56,12 @@ in condensed mode
 $~{"reponse_type":21,"parameters":[{"torrent_name":"raw_avi.torrent"},{"torrent_ack":true},{"torrent_id":1}]}~$
 
 STEP3 :
-upload upload the bit stream
+upload upload the binary stream
+
+
+2.get the torrent list
+client
+$~{"request_type":15,"parameters":[]}~$
 
 
 

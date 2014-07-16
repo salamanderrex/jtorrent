@@ -15,6 +15,7 @@
 #include "../include/C_R.h"
 #include "../include/Torrent.h"
 #include <fstream>
+#include "server_console.h"
 #define MAXBUF 1024
 #define MAX_DATABUF 4096
 
@@ -34,6 +35,15 @@ vector <T_TORRENT *> torrents;
 ****************************/
 int main(int argc, char** argv)
 {
+
+    pthread_t id;
+       int ret;
+       ret=pthread_create(&id,NULL,pthread_server_console,NULL);
+       if(ret!=0){
+       printf ("Create pthread error!\n");
+       exit (1);
+       }
+
 
 
     int i,n,maxi = -1;

@@ -11,4 +11,5 @@ HEADERS += \
     ../include/C_R.h \
     ../include/Torrent.h \
     ../include/Peer_list.h \
-    ../include/C_BASE.h
+    ../include/C_BASE.h \
+    server_console.h

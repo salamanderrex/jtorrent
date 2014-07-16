@@ -224,14 +224,17 @@ int main(int argc, char** argv)
                                 //entering the upload mode
                             {
                                 T_TORRENT * up_loading_torrent=new T_TORRENT();
+                                T_PEER_LIST *peer_list = new T_PEER_LIST();
+                                user_info info;
                                 up_loading_torrent->torrent_id=torrents.size()+1;
+                                peer_list->torrent_id = torrents.size()+1;
+                                info.user_ip = inet_ntoa(client[i].addr.sin_addr);
                                 std::cout<<"user want to upload a torrent server"<<std::endl;
                                 Json::Value parameters=jroot["parameters"];
                                 for(int i=0;i<parameters.size();i++)
                                 {
                                     if(parameters[i].isMember("torrent_name"))
                                     {
-
                                         up_loading_torrent->torrent_name=parameters[i]["torrent_name"].asString();
                                         std::cout<<"file name is"<< parameters[i]["torrent_name"].asString()<<std::endl;
                                     }
@@ -239,10 +242,18 @@ int main(int argc, char** argv)
                                     {
                                         up_loading_torrent->torrent_size=parameters[i]["torrent_size"].asInt();
                                         std::cout<<"file name is"<< parameters[i]["torrent_size"].asInt()<<std::endl;
-
+                                    }
+                                    else if(parameters[i].isMember("torrent_uploader"))
+                                    {
+                                        info.user_name = parameters[i]["torrent_uploader"].asString();
+                                    }
+                                    else if(parameters[i].isMember("torrent_port"))
+                                    {
+                                        peer_list->port = parameters[i]["torrent_port"].asInt();
                                     }
                                 }
-
+                                peer_list->info.push_back(info);
+                                up_loading_torrent->peer_list = peer_list;
                                 torrents.push_back(up_loading_torrent);
 
 
@@ -316,6 +327,28 @@ int main(int argc, char** argv)
                                 }
                             }
 
+                            else if(j_request_type==CLIENT_REQUEST_TYPE.REGISTER_IN_PEERLIST)
+                            {
+                                Json::Value parameters=jroot["parameters"];
+                                int j = 0;
+                                for(int i=0;i<parameters.size();i++)
+                                {
+                                    if(parameters[i].isMember("torrent_id"))
+                                    {
+                                        j=parameters[i]["torrent_id"].asInt();
+                                    }
+                                }
+                                T_TORRENT  * torrent=(T_TORRENT *) torrents.at(j-1);
+                                memset(res_buf,NULL,sizeof(res_buf));
+                                strcpy(res_buf,(c_r_server.generate_respose(SERVER_RESPONSE_TYPE.REGISTER_IN_PEERLIST,torrent->peer_list)).c_str());
+                                std::cout<<"server response:"<<res_buf<<std::endl;
+                                int  len = send(sockfd, res_buf, strlen(res_buf) - 1, 0);
+                                if (len > 0)
+                                    printf("msg:%s send successful锛宼otalbytes: %d锛乗n", res_buf, len);
+                                else {
+                                    printf("msg:'%s  failed!\n", res_buf);
+                                }
+                            }
 
 
                         }

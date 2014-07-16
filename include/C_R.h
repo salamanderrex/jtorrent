@@ -116,7 +116,18 @@ public:
                 root["parameters"]=parameters;
 
             }
-
+            else if(type == SERVER_RESPONSE_TYPE.REGISTER_IN_PEERLIST)
+            {
+                T_PEER_LIST *  peer_list= (T_PEER_LIST *)c_info_base;
+                parameter["torrent_port"]=peer_list->port;
+                for(int i = 0; i < peer_list->info.size(); i++){
+                    parameter["user_name"]=peer_list->info.at(i).user_name;
+                    parameter["user_id"]=peer_list->info.at(i).user_ip;
+                }
+                parameters.append(parameter);
+                root["reponse_type"]=type;
+                root["parameters"]=parameters;
+            }
 
           retrunstr= jwriter.write(root);
             add_header_ender(retrunstr);
@@ -141,8 +152,6 @@ public:
                     parameters.append(parameter);
                     root["reponse_type"]=type;
                     root["parameters"]=parameters;
-
-
                 }
 
             }

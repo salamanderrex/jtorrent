@@ -11,6 +11,7 @@ class user_info
 public:
     string user_name;
     string user_ip;
+     int port;
 };
 
 
@@ -22,15 +23,14 @@ public:
 
     }
 
-    T_PEER_LIST(int torrent_id, int port)
+    T_PEER_LIST(int torrent_id)
     {
         this->torrent_id = torrent_id;
-        this->port = port;
     }
 
     int torrent_id;
-    int port;
-    vector <user_info> info;
+
+    vector <user_info> uploader_list;
 };
 
 #endif PEER_LIST_H

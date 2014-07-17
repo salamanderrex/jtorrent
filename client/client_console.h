@@ -16,8 +16,8 @@
 #define MAX_DATABUF 4096
 char data_buf[MAX_DATABUF + 1];
 
-extern string SERVER_IP_ADDRESS;
-extern int SEREVER_PORT;
+
+
 extern C_R_CLIENT c_r_client;
 struct termios orig_termios;
 
@@ -132,20 +132,20 @@ void  *pthread_client_console(void *ptr)
 {
 
 
-    int sockfd;
-    struct sockaddr_in servaddr;
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    memset(&servaddr, 0, sizeof(servaddr));
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_port= htons(SEREVER_PORT);
-    inet_pton(AF_INET, SERVER_IP_ADDRESS.c_str(), &servaddr.sin_addr);
+
 
     // set_conio_terminal_mode();
 
 
 
     while(1)
-    {
+    {  int sockfd;
+        struct sockaddr_in servaddr;
+        sockfd = socket(AF_INET, SOCK_STREAM, 0);
+        memset(&servaddr, 0, sizeof(servaddr));
+        servaddr.sin_family = AF_INET;
+        servaddr.sin_port= htons(SERVER_PORT);
+        inet_pton(AF_INET, SERVER_IP_ADDRESS.c_str(), &servaddr.sin_addr);
 
         print_maenu();
         while (!kbhit()) {
@@ -379,7 +379,7 @@ void  *pthread_client_console(void *ptr)
 
 
             send(sockfd, get_torrent_list.c_str(),strlen(get_torrent_list.c_str()),0);
-            printf("sending instruction finish \n");
+            printf("sending instruction :%s \n",get_torrent_list.c_str());
 
             char recv_data_buf[MAX_DATABUF+1];
             int recv_n = recv(sockfd, recv_data_buf, MAX_DATABUF+1,0);
@@ -387,7 +387,9 @@ void  *pthread_client_console(void *ptr)
             printf("%s\n",recv_data_buf);
             string temp=recv_data_buf;
             c_r_client.remove_header_ender(temp);
+            cout<<temp<<endl;
             Json::Reader jreader;
+
             Json::Value jroot;
             std::cout<<temp<<endl;
             if(!jreader.parse(temp,jroot,false))
@@ -404,7 +406,7 @@ void  *pthread_client_console(void *ptr)
                 printf("torrent id \ttorrent name\n");
 
                 cout<<"["<<(parameters[i]["torrent_id"]).asInt()<<"]";
-                 cout<<"         \t"<<parameters[i]["torrent_name"].asString()<<endl;
+                cout<<"         \t"<<parameters[i]["torrent_name"].asString()<<endl;
             }
 
 
@@ -413,13 +415,70 @@ void  *pthread_client_console(void *ptr)
         }
 
 
-         else if(instruction_id=='3')
+        else if(instruction_id=='4')
         {
 
             char  choosen_torrent_order[20];
+            cout<<"give me the torrent id"<<endl;
             getchs(choosen_torrent_order);
             int down_load_id=atoi(choosen_torrent_order);
-            printf("I am going yo down load the %s\n",down_load_id);
+            //be lazy here
+            string temp="$~{\"request_type\":13,\"parameters\":[{\"torrent_id\":";
+            string end="}]}~$";;
+            string id;
+            stringstream ss;
+            ss<<down_load_id;
+            ss>>id;
+            ss.flush();
+
+            string get_peer_list=temp+id+end;
+
+
+            connect(sockfd, (struct sockaddr*)&servaddr,sizeof(servaddr));
+            send(sockfd, get_peer_list.c_str(),strlen(get_peer_list.c_str()),0);
+            cout<<"sending instruction finish "<<get_peer_list<<endl;
+            char recv_data_buf[MAX_DATABUF+1];
+            int recv_n = recv(sockfd, recv_data_buf, MAX_DATABUF+1,0);
+
+            //   printf("%s\n",recv_data_buf);
+
+
+
+            temp=recv_data_buf;
+            c_r_client.remove_header_ender(temp);
+            //    cout<<temp<<endl;
+            Json::Reader jreader;
+
+            Json::Value jroot;
+           // std::cout<<temp<<endl;
+            if(!jreader.parse(temp,jroot,false))
+            {
+                std::cout<<"erro in json parse"<<endl;
+                continue;
+            }
+
+            Json::Value parameters=jroot["parameters"];
+            std::cout<<"parameters size is "<<parameters.size()<<endl;
+             Json::Value torrent_id=jroot["torrent_id"].asInt();
+
+             cout<<"torrent id is "<<torrent_id<<end;
+            for(int i=0;i<parameters.size();i++)
+            {
+
+                printf("\n");
+
+                cout<<"port is :["<<(parameters[i]["torrent_port"]).asInt()<<"]";
+                cout<<" peer name is  "<<parameters[i]["user_name"].asString();
+                cout<<"ip :" <<(parameters[i]["user_ip"]).asString()<<endl;
+            }
+
+
+            //            parameter["torrent_port"]=peer_list->uploader_list.at(i).port;
+            //            parameter["user_name"]=peer_list->uploader_list.at(i).user_name;
+            //            parameter["user_ip"]=peer_list->uploader_list.at(i).user_ip;
+
+            cout<<"closing socket"<<endl;
+            close(sockfd);
         }
     }
 

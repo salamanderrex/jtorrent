@@ -5,6 +5,7 @@
 #include <vector>
 #include "C_BASE.h"
 #include "Peer_list.h"
+#include "C_R.h"
 using namespace std;
 
 

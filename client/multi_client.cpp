@@ -18,6 +18,7 @@
 #include "client_console.h"
 #include <fstream>
 #include <pthread.h>
+
 #define MAXBUF 1024
 
 
@@ -28,9 +29,9 @@ typedef struct CLIENT {
     struct sockaddr_in addr;
 }CLIENT;
 
- string SERVER_IP_ADDRESS="127.0.0.1";
- int SEREVER_PORT=1234;
- int CLIENT_PORT=1235;
+
+
+
 /***************************
 **server for multi-client
 **PF_SETSIZE=1024
@@ -70,7 +71,7 @@ int main(int argc, char** argv)
     if(argv[1])
         myport = atoi(argv[1]);
     else
-        myport = 1235;
+        myport = CLIENT_PORT;
 
     if(argv[2])
         lisnum = atoi(argv[2]);

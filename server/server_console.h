@@ -126,7 +126,7 @@ void  *pthread_server_console(void *ptr)
 
 
         char instruction_id=getch();
-        getch();
+      //  getch();
 
 
       

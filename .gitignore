@@ -18,12 +18,14 @@
 # binary file###
 ################
 server_multi
-server
+
 jtorrent_server
 client_multi
 mytest
-client
+
 jtorrent
+!./client/client.cpp
+!./client/multi_client.cpp
 
 ################
 # pro.user #####

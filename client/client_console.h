@@ -9,12 +9,23 @@
 #include <sys/ioctl.h>
 #include <netinet/in.h>
 #include <net/if.h>
+#include <string>
+#include <sstream>
+#include "Torrent.h"
+#include "C_R.h"
+#define MAX_DATABUF 4096
+char data_buf[MAX_DATABUF + 1];
+
+extern string SERVER_IP_ADDRESS;
+extern int SEREVER_PORT;
+extern C_R_CLIENT c_r_client;
 struct termios orig_termios;
 
 void reset_terminal_mode()
 {
     tcsetattr(0, TCSANOW, &orig_termios);
 }
+int send_instrucation(string instruction);
 
 void set_conio_terminal_mode()
 {
@@ -99,10 +110,8 @@ void hexPrinter( unsigned char* c, int l, FILE* torrent )
     fprintf(torrent, "\n");
 }
 
-void  *pthread_client_console(void *ptr)
+void print_maenu()
 {
-
-
 
     std::cout<<"====================================="<<endl
             <<"torrent main panel"<<endl
@@ -111,13 +120,25 @@ void  *pthread_client_console(void *ptr)
           <<  "1.create a torrent file"<<endl
            <<  "2.upload the torrent file to the server"<<endl
             << "3.get the torrent list from the server"<<endl
-            << "4.get the torrent you want from server"<<endl
+            << "4.get the torrent (peer list )you want from server"<<endl
             <<  "5.start downloading file for specific torrent file."<<endl
              <<  "6.show the torrent file in local "<<endl
               <<  "7.check the connection status "<<endl
                <<  "8.exit"<<endl
                 <<  "========================================"<<endl
                  <<endl;
+}
+void  *pthread_client_console(void *ptr)
+{
+
+
+    int sockfd;
+    struct sockaddr_in servaddr;
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    memset(&servaddr, 0, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_port= htons(SEREVER_PORT);
+    inet_pton(AF_INET, SERVER_IP_ADDRESS.c_str(), &servaddr.sin_addr);
 
     // set_conio_terminal_mode();
 
@@ -125,6 +146,8 @@ void  *pthread_client_console(void *ptr)
 
     while(1)
     {
+
+        print_maenu();
         while (!kbhit()) {
             /* do some work */
         }
@@ -132,10 +155,18 @@ void  *pthread_client_console(void *ptr)
 
         char instruction_id=getch();
         getch();
-       // std::cout<<instruction_id;
-       // printf("get orderid\n");
+        // std::cout<<instruction_id;
+        // printf("get orderid\n");
 
-        if(instruction_id=='1')
+        if(instruction_id=='c')
+            //clean terminal
+
+        {
+            system("clear");
+            print_maenu();
+            continue;
+        }
+        else   if(instruction_id=='1')
             //create torrent file
         {
             int BLOCK = 4096*1024;
@@ -200,6 +231,195 @@ void  *pthread_client_console(void *ptr)
             free(digest);
             fprintf(torrent, "%s\n",IP_address);
             fclose(torrent);
+
+
+
+            close(sockfd);
+        }
+
+
+
+        else if (instruction_id=='2')
+            //upload the torrent
+        {
+            int BLOCK = 4096*1024;
+            char buffer[BLOCK];
+
+
+            char    torrent_file_name [50];
+            char * IP_address;
+            cout<<"give the torrent file name"<<endl;
+            getchs(torrent_file_name);
+
+
+            //get piece_number
+            /*
+            int piece_number;
+
+            fstream fin(torrent_file_name);
+            string ReadLine;
+            //read first line
+            if(getline(fin,ReadLine))
+            {
+                cout<<ReadLine<<endl;
+            }
+            if(getline(fin,ReadLine))
+            {
+                piece_number=atoi(ReadLine.c_str());
+            }
+            fin.close();
+            */
+            FILE *fp;
+
+
+
+            int count = 1;
+            int size = 0;
+            int ret;
+            int length = 10;
+            SHA1* sha1 = new SHA1();
+            string SHA_RESULT;
+            unsigned char* digest;
+            fp = fopen(torrent_file_name, "rb");
+            if (fp == NULL) printf("open binary file failed\n");
+            stringstream stream;
+
+            while(!feof(fp)){
+                ret = fread(buffer,1,BLOCK,fp);
+                if (ret == 0) break;
+                sha1->addBytes(buffer, ret);
+                digest = sha1->getDigest();
+                unsigned char* temp_digest=digest;
+                int l=10;
+                char buf[10];
+
+                while( l > 0 )
+                {
+                    sprintf( buf, "%02x ", *temp_digest );
+                    // std::cout<<buf<<endl;
+                    l--;
+                    temp_digest++;
+                    stream<<buf;
+                }
+                size=ret+size;
+
+            }
+            delete sha1;
+            //  free(digest);
+            SHA_RESULT=stream.str();
+            stream.clear();
+            fclose(fp);
+            // std::cout<<torrent_file_name<<" SHA is :"<<SHA_RESULT<<endl;
+
+
+            //initialize the torrent class
+            T_TORRENT * uploading_torrent =new T_TORRENT(torrent_file_name,size,c_r_client.user_name,SHA_RESULT);
+            //  std::cout<<uploading_torrent->torrent_name<<uploading_torrent->up_loader<<uploading_torrent->torrent_SHA<<endl;
+
+            string send_requset=c_r_client.generate_request(CLIENT_REQUEST_TYPE.UPLOAD_TORRENT_INFO,uploading_torrent);
+            std::cout<<send_requset<<endl<<" to "<<SERVER_IP_ADDRESS<<endl;
+
+
+            //  send_instrucation(send_requset);
+            connect(sockfd, (struct sockaddr*)&servaddr,sizeof(servaddr));
+
+
+            send(sockfd, send_requset.c_str(),strlen(send_requset.c_str()),0);
+            printf("sending instruction: \n");
+            //wait the server respones
+            char recv_data_buf[MAX_DATABUF+1];
+            int recv_n = recv(sockfd, recv_data_buf, MAX_DATABUF,0);
+            printf("%s\n",recv_data_buf);
+            int ack= c_r_client.get_reponse_ack(recv_data_buf);
+
+            if(ack!=1)
+            {
+                std::cout<<"server decline your uplading torrent"<<endl;
+            }
+            else
+                //server give positive respose
+            {
+                cout<<"server accepte your upload request"<<endl;
+                cout<<"now start sending"<<endl;
+
+
+
+                fp = fopen(torrent_file_name, "rb");
+                bzero(data_buf, MAX_DATABUF);
+                int file_block_length = 0;
+                while( (file_block_length = fread(data_buf, sizeof(char), MAX_DATABUF, fp)) > 0)
+                {
+                    printf("file_block_length = %d\n", file_block_length);
+
+                    // 发送buffer中的字符串到new_server_socket,实际上就是发送给客户端
+                    if (send(sockfd, data_buf, file_block_length, 0) < 0)
+                    {
+                        printf("Send File:\t%s Failed!\n", torrent_file_name);
+                        break;
+                    }
+
+                    bzero(data_buf, sizeof(data_buf));
+                }
+                fclose(fp);
+                printf("File:\t%s Transfer Finished!\n", torrent_file_name);
+
+
+            }
+            cout<<"closing socket"<<endl;
+            close(sockfd);
+
+
+        }
+
+
+        else if(instruction_id=='3')
+        {
+            string get_torrent_list="$~{\"request_type\":15,\"parameters\":[]}~$";
+            connect(sockfd, (struct sockaddr*)&servaddr,sizeof(servaddr));
+
+
+            send(sockfd, get_torrent_list.c_str(),strlen(get_torrent_list.c_str()),0);
+            printf("sending instruction finish \n");
+
+            char recv_data_buf[MAX_DATABUF+1];
+            int recv_n = recv(sockfd, recv_data_buf, MAX_DATABUF+1,0);
+
+            printf("%s\n",recv_data_buf);
+            string temp=recv_data_buf;
+            c_r_client.remove_header_ender(temp);
+            Json::Reader jreader;
+            Json::Value jroot;
+            std::cout<<temp<<endl;
+            if(!jreader.parse(temp,jroot,false))
+            {
+                std::cout<<"erro in json parse"<<endl;
+                continue;
+            }
+
+            Json::Value parameters=jroot["parameters"];
+            std::cout<<"parameters size is "<<parameters.size()<<endl;
+            for(int i=0;i<parameters.size();i++)
+            {
+
+                printf("torrent id \ttorrent name\n");
+
+                cout<<"["<<(parameters[i]["torrent_id"]).asInt()<<"]";
+                 cout<<"         \t"<<parameters[i]["torrent_name"].asString()<<endl;
+            }
+
+
+            cout<<"closing socket"<<endl;
+            close(sockfd);
+        }
+
+
+         else if(instruction_id=='3')
+        {
+
+            char  choosen_torrent_order[20];
+            getchs(choosen_torrent_order);
+            int down_load_id=atoi(choosen_torrent_order);
+            printf("I am going yo down load the %s\n",down_load_id);
         }
     }
 

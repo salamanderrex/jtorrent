@@ -1,10 +1,13 @@
 HEADERS += sha1.h \
     send.h \
     ../lib/C_R.h \
-    client_console.h
+    client_console.h \
+    ../include/C_R.h \
+    ../include/Torrent.h
 SOURCES += sha1.cpp \
     send.cpp \
-    multi_client.cpp
+    multi_client.cpp \
+    ../include/C_R.cpp
 
 unix:!macx:!symbian: LIBS += -L$$PWD/../lib/ -ljsoncpp
 

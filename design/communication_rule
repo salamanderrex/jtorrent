@@ -43,7 +43,7 @@ STX_FLAG
 "reponse_type":21,
 "parameters":[
 {
-"torrent_ack":true
+"torrent_ack":1
 },
 {
 "torrent_id":1
@@ -53,7 +53,7 @@ STX_FLAG
 EDX_FLAG	
 
 in condensed mode
-$~{"reponse_type":21,"parameters":[{"torrent_name":"raw_avi.torrent"},{"torrent_ack":true},{"torrent_id":1}]}~$
+$~{"reponse_type":21,"parameters":[{"torrent_name":"raw_avi.torrent"},{"torrent_ack":1},{"torrent_id":1}]}~$
 
 STEP3 :
 upload upload the binary stream

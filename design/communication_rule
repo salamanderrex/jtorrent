@@ -27,13 +27,16 @@ STX_FLAG
 },
 {
 "torrent_size":"100"
+},
+{
+"torrent_port":"4321"
 }
 ]
 }
 EDX_FLAG
 
 in another word, a condensed and real r_c mode
-$~{"request_type":12,"parameters":[{"torrent_name":"raw_avi.torrent"},{"torrent_SHA":"there_is_SHA_CHECK"},{"torrent_uploader":"zqu"},{"torrent_size":100}]}~$
+$~{"request_type":12,"parameters":[{"torrent_name":"raw_avi.torrent"},{"torrent_SHA":"there_is_SHA_CHECK"},{"torrent_uploader":"zqu"},{"torrent_size":100},{"torrent_port":4321}]}~$
 
 STEP2 :
 then server response 
@@ -63,6 +66,7 @@ upload upload the binary stream
 client
 $~{"request_type":15,"parameters":[]}~$
 
-
-
+3. get the peer list
+client
+$~{"request_type":13,"parameters":[{"torrent_id":1}]}~$
 

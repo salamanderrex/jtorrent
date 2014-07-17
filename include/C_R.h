@@ -6,6 +6,7 @@
 #include "Torrent.h"
 #include "json/json.h"
 //string SERVER_IP_ADDRESS="127.0.0.1";
+extern string CLIENT_PORT;
 using namespace std;
 
 class T_CLIENT_REQUEST_TYPE
@@ -107,6 +108,7 @@ public:
             parameter["torrent_name"]=torrent->torrent_name;
             parameter["torrent_SHA"]=torrent->torrent_SHA;
             parameter["torrent_size"]=torrent->torrent_size;
+            parameter["torrent_port"]=CLIENT_PORT;
             parameters.append(parameter);
             root["request_type"]=type;
             root["parameters"]=parameters;
@@ -145,6 +147,7 @@ public:
                 if(parameters[i].isMember("torrent_name"))
              //   {
 
+<<<<<<< HEAD
 
                     std::cout<<"file name is"<< parameters[i]["torrent_name"].asString()<<std::endl;
             //    }
@@ -162,6 +165,20 @@ public:
                     std::cout<<"idis"<< (parameters[i]["torrent_id"]).asInt()<<std::endl;
 
             //    }
+=======
+            }
+            else if(type == SERVER_RESPONSE_TYPE.REGISTER_IN_PEERLIST)
+            {
+                T_PEER_LIST *  peer_list= (T_PEER_LIST *)c_info_base;
+                parameter["torrent_port"]=peer_list->port;
+                for(int i = 0; i < peer_list->info.size(); i++){
+                    parameter["user_name"]=peer_list->info.at(i).user_name;
+                    parameter["user_id"]=peer_list->info.at(i).user_ip;
+                }
+                parameters.append(parameter);
+                root["reponse_type"]=type;
+                root["parameters"]=parameters;
+>>>>>>> 4b61685cfdd2e51c5bd421b51a91111d880b8f56
             }
 
         }
@@ -170,6 +187,7 @@ public:
 
     }
 
+<<<<<<< HEAD
     void add_header_ender(string & inputstring)
     {
         inputstring = STX_FLAG+inputstring.substr(0,inputstring.size()-1)+ETX_FLAG;
@@ -183,6 +201,19 @@ class C_R_SERVER :public C_R
 public:
     static const string TORRENT_LIST ;
     //others implement in the same way
+=======
+            if(type==SERVER_RESPONSE_TYPE.TORRENT_LIST)
+            {
+                for(int i=0; i<inputvector.size();i++)
+                {
+                    T_TORRENT  * torrent=(T_TORRENT *) inputvector.at(i);
+                    parameter["torrent_name"]=torrent->torrent_name;
+                    parameter["torrent_id"]=torrent->torrent_id;
+                    parameters.append(parameter);
+                    root["reponse_type"]=type;
+                    root["parameters"]=parameters;
+                }
+>>>>>>> 4b61685cfdd2e51c5bd421b51a91111d880b8f56
 
     Json::FastWriter jwriter;
 

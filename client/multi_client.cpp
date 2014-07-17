@@ -30,6 +30,7 @@ typedef struct CLIENT {
 
  string SERVER_IP_ADDRESS="127.0.0.1";
  int SEREVER_PORT=1234;
+ int CLIENT_PORT=1235;
 /***************************
 **server for multi-client
 **PF_SETSIZE=1024

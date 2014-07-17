@@ -161,9 +161,191 @@ int main(int argc, char** argv)
  int j_request_type=0;
                         if((n = recv(sockfd,buf,MAXBUF,0)) > 0)
                         {
+<<<<<<< HEAD
     printf("received data:%s\n from %s\n",buf,inet_ntoa(client[i].addr.sin_addr));
 
 std::cout<<endl;
+=======
+                            printf("received data:%s\n from %s\n",buf,inet_ntoa(client[i].addr.sin_addr));
+                            std::cout<<std::endl;
+                            //detect the start of the instruction
+                            string instruction=buf;
+                            if(c_r_server.detect_STX(instruction)&c_r_server.detect_ETX(instruction))
+                            {
+                                c_r_server.remove_header_ender(instruction);
+                                std::cout<<"finish receive instruction from client, it is :"<<instruction<<std::endl;
+                            }
+                            else if(c_r_server.detect_STX(instruction))
+
+                            {
+
+                                memset(buf,0,MAXBUF);
+                                while(1)
+                                {
+                                    if((n = recv(sockfd,buf,MAXBUF,0)) > 0)
+                                    {
+                                        printf("received data:%s\n from %s\n",buf,inet_ntoa(client[i].addr.sin_addr));
+                                        std::cout<<std::endl;
+                                    }
+                                    instruction.append(buf);
+                                    string temp(buf);
+                                    if(c_r_server.detect_ETX(temp))
+                                    {
+                                        memset(buf,0,MAXBUF);
+                                        break;
+                                    }
+
+                                }
+                                std::cout<<"finish receive instruction from client"<<std::endl;
+                            }
+
+
+
+                            //analyze the request instrucion
+                            //initial the jsoncpp engine
+                            Json::Reader jreader;
+                            Json::Value jroot;
+
+                            if(!jreader.parse(instruction,jroot,false))
+                            {
+                                perror("json reader");
+                                exit(-1);
+                            }
+                            int j_request_type=jroot["request_type"].asInt();
+
+                            std::cout<<jroot["request_type"]<<std::endl;
+
+
+                            if (j_request_type==CLIENT_REQUEST_TYPE.UPLOAD_TORRENT_INFO)
+                                //entering the upload mode
+                            {
+                                T_TORRENT * up_loading_torrent=new T_TORRENT();
+                                T_PEER_LIST *peer_list = new T_PEER_LIST();
+                                user_info info;
+                                up_loading_torrent->torrent_id=torrents.size()+1;
+                                peer_list->torrent_id = torrents.size()+1;
+                                info.user_ip = inet_ntoa(client[i].addr.sin_addr);
+                                std::cout<<"user want to upload a torrent server"<<std::endl;
+                                Json::Value parameters=jroot["parameters"];
+                                for(int i=0;i<parameters.size();i++)
+                                {
+                                    if(parameters[i].isMember("torrent_name"))
+                                    {
+                                        up_loading_torrent->torrent_name=parameters[i]["torrent_name"].asString();
+                                        std::cout<<"file name is"<< parameters[i]["torrent_name"].asString()<<std::endl;
+                                    }
+                                    else if(parameters[i].isMember("torrent_size"))
+                                    {
+                                        up_loading_torrent->torrent_size=parameters[i]["torrent_size"].asInt();
+                                        std::cout<<"file name is"<< parameters[i]["torrent_size"].asInt()<<std::endl;
+                                    }
+                                    else if(parameters[i].isMember("torrent_uploader"))
+                                    {
+                                        info.user_name = parameters[i]["torrent_uploader"].asString();
+                                    }
+                                    else if(parameters[i].isMember("torrent_port"))
+                                    {
+                                        peer_list->port = parameters[i]["torrent_port"].asInt();
+                                    }
+                                }
+                                peer_list->info.push_back(info);
+                                up_loading_torrent->peer_list = peer_list;
+                                torrents.push_back(up_loading_torrent);
+
+
+                                //send response
+
+
+                                strcpy(res_buf,(c_r_server.generate_respose(SERVER_RESPONSE_TYPE.UPLOAD_TORRENT_INFO,up_loading_torrent)).c_str());
+                                std::cout<<"server response:"<<res_buf<<std::endl;
+                                int  len = send(sockfd, res_buf, strlen(res_buf) - 1, 0);
+                                if (len > 0)
+                                    printf("msg:%s send successful锛宼otalbytes: %d锛乗n", res_buf, len);
+                                else {
+                                    printf("msg:'%s  failed!\n", res_buf);
+                                }
+
+                                //wait for the uping the .torrent file
+                                char recv_data_buf[MAX_DATABUF+1];
+                                ofstream out_stream;
+                                out_stream.open(up_loading_torrent->torrent_name.c_str(),ios::binary);
+                                int recv_n;
+                                while(1)
+                                {
+                                    recv_n = recv(sockfd, recv_data_buf, MAX_DATABUF,0);
+                                      printf("received data:%s\n from %s\n",recv_data_buf,inet_ntoa(client[i].addr.sin_addr));
+                                                     std::cout<<"close out stream"<<std::endl;
+                                    if (recv_n == 0) break;
+                                     out_stream<<recv_data_buf;
+                                     out_stream.flush();
+                                }
+                                std::cout<<"close out stream"<<std::endl;
+                                out_stream.close();
+                                  std::cout<<"upload torrent file finished"<<std::endl;
+
+                                /*
+          FILE* fp = NULL;
+          fp = fopen(jroot["torrent_name"].asString().c_str(), "ab");
+          if (fp == NULL) printf("open binary file failed\n");
+          int ret;
+          int count = 0;
+
+          while(1){
+              //printf("accept begin\n");
+
+              //printf("accept ok\n");
+              n = recv(connfd, buff, 4096,0);
+              if (n == 0) break;
+              //printf("ddd\n");
+              //printf("recv ok\n");
+              //buff[n];
+              //printf("connfd: recv msg from client\n");
+              fwrite(buff,1,n,fp);
+          }
+          */
+
+                            }
+
+                            //ask for torrent list
+
+                            else if(j_request_type==CLIENT_REQUEST_TYPE.TORRENT_LIST)
+                            {
+
+                                        //response
+                                memset(res_buf,NULL,sizeof(res_buf));
+                                strcpy(res_buf,(c_r_server.generate_respose(SERVER_RESPONSE_TYPE.TORRENT_LIST,torrents)).c_str());
+                                std::cout<<"server response:"<<res_buf<<std::endl;
+                                int  len = send(sockfd, res_buf, strlen(res_buf) - 1, 0);
+                                if (len > 0)
+                                    printf("msg:%s send successful锛宼otalbytes: %d锛乗n", res_buf, len);
+                                else {
+                                    printf("msg:'%s  failed!\n", res_buf);
+                                }
+                            }
+
+                            else if(j_request_type==CLIENT_REQUEST_TYPE.REGISTER_IN_PEERLIST)
+                            {
+                                Json::Value parameters=jroot["parameters"];
+                                int j = 0;
+                                for(int i=0;i<parameters.size();i++)
+                                {
+                                    if(parameters[i].isMember("torrent_id"))
+                                    {
+                                        j=parameters[i]["torrent_id"].asInt();
+                                    }
+                                }
+                                T_TORRENT  * torrent=(T_TORRENT *) torrents.at(j-1);
+                                memset(res_buf,NULL,sizeof(res_buf));
+                                strcpy(res_buf,(c_r_server.generate_respose(SERVER_RESPONSE_TYPE.REGISTER_IN_PEERLIST,torrent->peer_list)).c_str());
+                                std::cout<<"server response:"<<res_buf<<std::endl;
+                                int  len = send(sockfd, res_buf, strlen(res_buf) - 1, 0);
+                                if (len > 0)
+                                    printf("msg:%s send successful锛宼otalbytes: %d锛乗n", res_buf, len);
+                                else {
+                                    printf("msg:'%s  failed!\n", res_buf);
+                                }
+                            }
+>>>>>>> 4b61685cfdd2e51c5bd421b51a91111d880b8f56
 
 
  //   while(1);

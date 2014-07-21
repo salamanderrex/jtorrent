@@ -29,7 +29,7 @@ typedef struct CLIENT {
     struct sockaddr_in addr;
 }CLIENT;
 
-
+vector <T_TORRENT *> torrents;
 
 
 /***************************

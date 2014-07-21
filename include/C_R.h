@@ -20,9 +20,9 @@ public :
         REQUEST_PEERLIST=13,
         READY_TO_RECEIVE_TORRENT_FROM_SERVER=16,
         C_C_REQUEST_SHAKE_HAND=17,
-        C_C REQUEST_BTFIELD=18,
+        C_C_REQUEST_BTFIELD=18,
         C_C_REQUEST_REQUEST=19,
-        CC_HAVE=18,
+        C_C_HAVE=18,
         C_C_REQUESR_REQUEST_1=20
         //  UP_LOAD_FILE=14
     };
@@ -34,7 +34,7 @@ public :
     enum
     {
         C_C_REQUEST_SHAKE_HAND_REPLY=71,
-        C_C RESPONSE_BTFIELD=81,
+        C_C_RESPONSE_BTFIELD=81,
 
         C_C_REQUEST_RESPONSE=91
     };
@@ -197,6 +197,51 @@ public:
         return flag;
 
     }
+
+
+
+    int get_id_on_server(string instruction)
+    {
+
+        int id=0;
+        Json::Value jroot;
+        remove_header_ender(instruction);
+        if(!jreader.parse(instruction,jroot,false))
+        {
+            std::cout<<"erro in json parse"<<endl;
+            return false;
+        }
+        int type=jroot["response_type"].asInt();
+        cout<<"type is "<<type<<endl;
+        if (type==SERVER_RESPONSE_TYPE.UPLOAD_TORRENT_INFO)
+        {
+            std::cout<<"this is the server upload response"<<std::endl;
+            Json::Value parameters=jroot["parameters"];
+            std::cout<<"parameters size is "<<parameters.size()<<endl;
+            for(int i=0;i<parameters.size();i++)
+            {
+
+                if(parameters[i].isMember("torrent_name"))
+
+
+                    std::cout<<"file name is"<< parameters[i]["torrent_name"].asString()<<std::endl;
+
+
+                std::cout<<"id is"<< (parameters[i]["torrent_id"]).asInt()<<std::endl;
+           id=(parameters[i]["torrent_id"]).asInt();
+
+
+
+            }
+
+        }
+
+
+
+        return id;
+
+    }
+
 
     void add_header_ender(string & inputstring)
     {

@@ -18,7 +18,25 @@ public :
         TORRENT_LIST	=15,
         UPLOAD_TORRENT_INFO=12,
         REQUEST_PEERLIST=13,
+        READY_TO_RECEIVE_TORRENT_FROM_SERVER=16,
+        C_C_REQUEST_SHAKE_HAND=17,
+        C_C REQUEST_BTFIELD=18,
+        C_C_REQUEST_REQUEST=19,
+        CC_HAVE=18,
+        C_C_REQUESR_REQUEST_1=20
         //  UP_LOAD_FILE=14
+    };
+};
+
+class T_CLIENT_RESPONSE_TYPE
+{
+public :
+    enum
+    {
+        C_C_REQUEST_SHAKE_HAND_REPLY=71,
+        C_C RESPONSE_BTFIELD=81,
+
+        C_C_REQUEST_RESPONSE=91
     };
 };
 class T_SERVER_RESPONSE
@@ -29,12 +47,14 @@ public :
         TORRENT_LIST	=51,
         UPLOAD_TORRENT_INFO=21,
         RESPONSE_PEERLIST=31,
+
         //   UP_LOAD_FILE=41
     };
 };
 
 extern T_CLIENT_REQUEST_TYPE CLIENT_REQUEST_TYPE;
 extern T_SERVER_RESPONSE SERVER_RESPONSE_TYPE;
+extern T_CLIENT_RESPONSE_TYPE CLINET_RESPONSE_TYPE;
 class C_R
 {
 public:

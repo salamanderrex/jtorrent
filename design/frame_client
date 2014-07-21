@@ -17,9 +17,9 @@ hello user : username
 2.upload the torrent file to the server
 3.get the torrent list from the server
 4.get the torrent you want from server
-5.start downloading file for specific torrent file.
+5.start peer list from server
 6.show the torrent file in local 
-7.check the connection status 
+7.start specific downlosing file
 8.exit
 ========================================
  

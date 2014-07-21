@@ -423,7 +423,7 @@ void  *pthread_client_console(void *ptr)
             int down_load_id=atoi(choosen_torrent_order);
             //be lazy here
             string temp="$~{\"request_type\":14,\"parameters\":[{\"torrent_id\":";
-            string end="}]}~$";;
+            string end="}]}~$";
             string id;
             stringstream ss;
             ss<<down_load_id;

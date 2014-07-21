@@ -19,7 +19,25 @@ public :
         UPLOAD_TORRENT_INFO=12,
         REQUEST_PEERLIST=13,
         DOWNLOAD_TORRENT=14,
+        READY_TO_RECEIVE_TORRENT_FROM_SERVER=16,
+        C_C_REQUEST_SHAKE_HAND=17,
+        C_C_REQUEST_BTFIELD=18,
+        C_C_REQUEST_REQUEST=19,
+        C_C_HAVE=18,
+        C_C_REQUESR_REQUEST_1=20
         //  UP_LOAD_FILE=14
+    };
+};
+
+class T_CLIENT_RESPONSE_TYPE
+{
+public :
+    enum
+    {
+        C_C_REQUEST_SHAKE_HAND_REPLY=71,
+        C_C_RESPONSE_BTFIELD=81,
+
+        C_C_REQUEST_RESPONSE=91
     };
 };
 class T_SERVER_RESPONSE
@@ -30,13 +48,14 @@ public :
         TORRENT_LIST	=51,
         UPLOAD_TORRENT_INFO=21,
         RESPONSE_PEERLIST=31,
-        DOWNTOAD_TORRENT=41,
+        DOWNLOAD_TORRENT=41,
         //   UP_LOAD_FILE=41
     };
 };
 
 extern T_CLIENT_REQUEST_TYPE CLIENT_REQUEST_TYPE;
 extern T_SERVER_RESPONSE SERVER_RESPONSE_TYPE;
+extern T_CLIENT_RESPONSE_TYPE CLINET_RESPONSE_TYPE;
 class C_R
 {
 public:
@@ -216,7 +235,7 @@ public:
             root["parameters"]=parameters;
 
         }
-        else if(type==SERVER_RESPONSE_TYPE.DOWNTOAD_TORRENT)
+        else if(type==SERVER_RESPONSE_TYPE.DOWNLOAD_TORRENT)
         {
             T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
             parameter["torrent_id"]=torrent->torrent_id;

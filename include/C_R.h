@@ -18,6 +18,7 @@ public :
         TORRENT_LIST	=15,
         UPLOAD_TORRENT_INFO=12,
         REQUEST_PEERLIST=13,
+        DOWNLOAD_TORRENT=14,
         //  UP_LOAD_FILE=14
     };
 };
@@ -29,6 +30,7 @@ public :
         TORRENT_LIST	=51,
         UPLOAD_TORRENT_INFO=21,
         RESPONSE_PEERLIST=31,
+        DOWNTOAD_TORRENT=41,
         //   UP_LOAD_FILE=41
     };
 };
@@ -116,14 +118,13 @@ public:
             root["parameters"]=parameters;
 
         }
-
-
         retrunstr= jwriter.write(root);
         //   std::cout<<"in the writer"<<retrunstr<<endl;
         add_header_ender(retrunstr);
         //     std::cout<<"in the writer"<<retrunstr<<endl;
         return retrunstr;
     }
+
 
     int get_reponse_ack(string instruction)
     {
@@ -215,6 +216,17 @@ public:
             root["parameters"]=parameters;
 
         }
+        else if(type==SERVER_RESPONSE_TYPE.DOWNTOAD_TORRENT)
+        {
+            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+            parameter["torrent_id"]=torrent->torrent_id;
+            parameter["torrent_SHA"]=torrent->torrent_SHA;
+            parameter["torrent_size"]=torrent->torrent_size;
+            parameters.append(parameter);
+            root["response_type"]=type;
+            root["parameters"]=parameters;
+
+        }
         else if(type == SERVER_RESPONSE_TYPE.RESPONSE_PEERLIST)
         {
             T_PEER_LIST *  peer_list= (T_PEER_LIST *)c_info_base;
@@ -232,6 +244,7 @@ public:
 
 
         }
+
 
 
         retrunstr= jwriter.write(root);

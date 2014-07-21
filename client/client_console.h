@@ -120,11 +120,12 @@ void print_maenu()
           <<  "1.create a torrent file"<<endl
            <<  "2.upload the torrent file to the server"<<endl
             << "3.get the torrent list from the server"<<endl
-            << "4.get the torrent (peer list )you want from server"<<endl
-            <<  "5.start downloading file for specific torrent file."<<endl
-             <<  "6.show the torrent file in local "<<endl
-              <<  "7.check the connection status "<<endl
-               <<  "8.exit"<<endl
+            << "4.get the torrent you want from server"<<endl
+            << "5.get the peer list you want from server"<<endl
+            <<  "6.start downloading file for specific torrent file."<<endl
+             <<  "7.show the torrent file in local "<<endl
+              <<  "8.check the connection status "<<endl
+               <<  "9.exit"<<endl
                 <<  "========================================"<<endl
                  <<endl;
 }
@@ -317,7 +318,7 @@ void  *pthread_client_console(void *ptr)
             //  std::cout<<uploading_torrent->torrent_name<<uploading_torrent->up_loader<<uploading_torrent->torrent_SHA<<endl;
 
             string send_requset=c_r_client.generate_request(CLIENT_REQUEST_TYPE.UPLOAD_TORRENT_INFO,uploading_torrent);
-            std::cout<<send_requset<<endl<<" to "<<SERVER_IP_ADDRESS<<endl;
+            std::cout<<send_requset<<endl<<"to "<<SERVER_IP_ADDRESS<<endl;
 
 
             //  send_instrucation(send_requset);
@@ -339,7 +340,7 @@ void  *pthread_client_console(void *ptr)
             else
                 //server give positive respose
             {
-                cout<<"server accepte your upload request"<<endl;
+                cout<<"server accept your upload request"<<endl;
                 cout<<"now start sending"<<endl;
 
 
@@ -414,8 +415,34 @@ void  *pthread_client_console(void *ptr)
             close(sockfd);
         }
 
-
         else if(instruction_id=='4')
+        {
+            char  choosen_torrent_order[20];
+            cout<<"give me the torrent id"<<endl;
+            getchs(choosen_torrent_order);
+            int down_load_id=atoi(choosen_torrent_order);
+            //be lazy here
+            string temp="$~{\"request_type\":14,\"parameters\":[{\"torrent_id\":";
+            string end="}]}~$";;
+            string id;
+            stringstream ss;
+            ss<<down_load_id;
+            ss>>id;
+            ss.flush();
+            string get_torrent=temp+id+end;
+            connect(sockfd, (struct sockaddr*)&servaddr,sizeof(servaddr));
+            send(sockfd, get_torrent.c_str(),strlen(get_torrent.c_str()),0);
+            cout<<"sending instruction finish "<<get_torrent<<endl;
+            char recv_data_buf[MAX_DATABUF+1];
+            int recv_n = recv(sockfd, recv_data_buf, MAX_DATABUF+1,0);
+            temp=recv_data_buf;
+            c_r_client.remove_header_ender(temp);
+
+            cout<<"closing socket"<<endl;
+            close(sockfd);
+        }
+
+        else if(instruction_id=='5')
         {
 
             char  choosen_torrent_order[20];
@@ -479,6 +506,10 @@ void  *pthread_client_console(void *ptr)
 
             cout<<"closing socket"<<endl;
             close(sockfd);
+        }
+        else if(instruction_id=='5')
+        {
+
         }
     }
 

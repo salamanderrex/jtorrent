@@ -9,11 +9,7 @@ HEADERS += \
     ../include/C_BASE.h \
     server_console.h
 
-
-
-unix:!macx:!symbian: LIBS += -L$$PWD/../lib/ -ljsoncpp
-
-
+unix:!macx:!symbian: LIBS += -L$$PWD/../lib/ -ljsonlib
 
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include

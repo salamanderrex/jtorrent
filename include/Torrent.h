@@ -8,16 +8,6 @@
 #include "C_R.h"
 using namespace std;
 
-
-class T_TORRENT_PIECE
-{
-public:
-    string SHA;
-    string location;
-    int size;
-    int order;
-};
-
 class T_TORRENT:public C_INFO_BASE{
 public:
     T_TORRENT()

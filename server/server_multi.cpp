@@ -342,7 +342,29 @@ fwrite(buff,1,n,fp);
 
 
                             }
-
+                            else if(j_request_type==CLIENT_REQUEST_TYPE.DOWNLOAD_TORRENT)
+                            {
+                               memset(res_buf,NULL,sizeof(res_buf));
+                               cout<<"a client want a torrent"<<endl;
+                               Json::Value parameters=jroot["parameters"];
+                               int j = 0;
+                               for(int i=0;i<parameters.size();i++)
+                               {
+                                   if(parameters[i].isMember("torrent_id"))
+                                   {
+                                       j=parameters[i]["torrent_id"].asInt();
+                                   }
+                               }
+                               T_TORRENT * torrent=(T_TORRENT *) torrents.at(j-1);
+                               strcpy(res_buf,(c_r_server.generate_respose(SERVER_RESPONSE_TYPE.DOWNTOAD_TORRENT,torrent)).c_str());
+                               std::cout<<"server response:"<<res_buf<<std::endl;
+                               int  len = send(sockfd, res_buf, strlen(res_buf)+1 , 0);
+                               if (len > 0)
+                                   printf("msg:%s send successful锛宼otalbytes: %d锛乗n", res_buf, len);
+                               else {
+                                   printf("msg:'%s  failed!\n", res_buf);
+                               }
+                            }
 
                             else if(j_request_type==CLIENT_REQUEST_TYPE.REQUEST_PEERLIST)
                             {

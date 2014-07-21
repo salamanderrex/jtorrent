@@ -14,6 +14,14 @@ public:
      int port;
 };
 
+class T_TORRENT_PIECE
+{
+public:
+    string SHA;
+    string location;
+    int size;
+    int order;
+};
 
 class T_PEER_LIST:public C_INFO_BASE
 {
@@ -29,7 +37,7 @@ public:
     }
 
     int torrent_id;
-
+    vector <T_TORRENT_PIECE> pieces;
     vector <user_info> uploader_list;
 };
 

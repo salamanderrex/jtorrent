@@ -16,7 +16,7 @@
 #define MAX_DATABUF 4096
 char data_buf[MAX_DATABUF + 1];
 
-
+extern vector <T_TORRENT *> torrents;
 
 extern C_R_CLIENT c_r_client;
 struct termios orig_termios;
@@ -120,12 +120,21 @@ void print_maenu()
           <<  "1.create a torrent file"<<endl
            <<  "2.upload the torrent file to the server"<<endl
             << "3.get the torrent list from the server"<<endl
+<<<<<<< HEAD
             << "4.get the torrent you want from server"<<endl
             << "5.get the peer list you want from server"<<endl
             <<  "6.start downloading file for specific torrent file."<<endl
              <<  "7.show the torrent file in local "<<endl
               <<  "8.check the connection status "<<endl
                <<  "9.exit"<<endl
+=======
+            << "4.get the torrent (peer list )you want from server"<<endl
+            <<  "5.start downloading file for specific torrent file."<<endl
+             <<  "6.show the torrent file in local "<<endl
+              <<  "7.check the connection status "<<endl
+               <<  "8.exit"<<endl
+
+>>>>>>> 36abe804264dca0d809f316098fd6cea194b8191
                 <<  "========================================"<<endl
                  <<endl;
 }
@@ -254,22 +263,23 @@ void  *pthread_client_console(void *ptr)
 
 
             //get piece_number
-            /*
-            int piece_number;
+
+            int piece_number=0;
+            int file_size=0;
 
             fstream fin(torrent_file_name);
             string ReadLine;
             //read first line
             if(getline(fin,ReadLine))
             {
-                cout<<ReadLine<<endl;
+               file_size=atoi(ReadLine.c_str());
             }
             if(getline(fin,ReadLine))
             {
                 piece_number=atoi(ReadLine.c_str());
             }
             fin.close();
-            */
+
             FILE *fp;
 
 
@@ -300,6 +310,7 @@ void  *pthread_client_console(void *ptr)
                     // std::cout<<buf<<endl;
                     l--;
                     temp_digest++;
+
                     stream<<buf;
                 }
                 size=ret+size;
@@ -314,7 +325,7 @@ void  *pthread_client_console(void *ptr)
 
 
             //initialize the torrent class
-            T_TORRENT * uploading_torrent =new T_TORRENT(torrent_file_name,size,c_r_client.user_name,SHA_RESULT);
+            T_TORRENT * uploading_torrent =new T_TORRENT(torrent_file_name,size,c_r_client.user_name,SHA_RESULT,file_size,piece_number);
             //  std::cout<<uploading_torrent->torrent_name<<uploading_torrent->up_loader<<uploading_torrent->torrent_SHA<<endl;
 
             string send_requset=c_r_client.generate_request(CLIENT_REQUEST_TYPE.UPLOAD_TORRENT_INFO,uploading_torrent);
@@ -340,16 +351,30 @@ void  *pthread_client_console(void *ptr)
             else
                 //server give positive respose
             {
+<<<<<<< HEAD
                 cout<<"server accept your upload request"<<endl;
+=======
+                 int torrent_id_on_server=c_r_client.get_id_on_server(recv_data_buf);
+                 uploading_torrent->torrent_id=torrent_id_on_server;
+                cout<<"server accepte your upload request"<<endl;
+>>>>>>> 36abe804264dca0d809f316098fd6cea194b8191
                 cout<<"now start sending"<<endl;
 
 
 
                 fp = fopen(torrent_file_name, "rb");
                 bzero(data_buf, MAX_DATABUF);
+                int current_order =1;
                 int file_block_length = 0;
                 while( (file_block_length = fread(data_buf, sizeof(char), MAX_DATABUF, fp)) > 0)
                 {
+                    T_TORRENT_PIECE  *tem_piece= new T_TORRENT_PIECE;
+                    tem_piece->done=1;
+                    tem_piece->order=current_order++;
+                    tem_piece->size=file_block_length;
+                    tem_piece->location=torrent_file_name;
+                    uploading_torrent->pieces.push_back( tem_piece);
+                    // uploading_torrent->++;
                     printf("file_block_length = %d\n", file_block_length);
 
                     // 发送buffer中的字符串到new_server_socket,实际上就是发送给客户端
@@ -363,6 +388,13 @@ void  *pthread_client_console(void *ptr)
                 }
                 fclose(fp);
                 printf("File:\t%s Transfer Finished!\n", torrent_file_name);
+
+                printf("adding the torrent into the torrent vector\n");
+
+                torrents.push_back(uploading_torrent);
+                uploading_torrent->status=1;
+
+
 
 
             }
@@ -477,7 +509,7 @@ void  *pthread_client_console(void *ptr)
             Json::Reader jreader;
 
             Json::Value jroot;
-           // std::cout<<temp<<endl;
+            // std::cout<<temp<<endl;
             if(!jreader.parse(temp,jroot,false))
             {
                 std::cout<<"erro in json parse"<<endl;
@@ -486,9 +518,9 @@ void  *pthread_client_console(void *ptr)
 
             Json::Value parameters=jroot["parameters"];
             std::cout<<"parameters size is "<<parameters.size()<<endl;
-             Json::Value torrent_id=jroot["torrent_id"].asInt();
+            Json::Value torrent_id=jroot["torrent_id"].asInt();
 
-             cout<<"torrent id is "<<torrent_id<<end;
+            cout<<"torrent id is "<<torrent_id<<end;
             for(int i=0;i<parameters.size();i++)
             {
 
@@ -507,8 +539,35 @@ void  *pthread_client_console(void *ptr)
             cout<<"closing socket"<<endl;
             close(sockfd);
         }
+<<<<<<< HEAD
         else if(instruction_id=='5')
         {
+=======
+
+
+        else if (instruction_id=='6')
+        {
+            printf("local torrent list\n");
+            printf("\t torrent_id \ttorrent_name \t torrent_size \tpiece_number \tstatus \t file_size \n");
+
+            for (int i=0;i<torrents.size();i++)
+            {
+
+                cout<< "\t ["<<((T_TORRENT *)torrents.at(i))->torrent_id<< "] \t"<<((T_TORRENT *)torrents.at(i))->torrent_name<< "\t"<<((T_TORRENT *)torrents.at(i))->torrent_size<<"\t  "
+                    << "\t  "<<     ((T_TORRENT *)torrents.at(i))->status <<"\t"<<((T_TORRENT *)torrents.at(i))->piece_number<<"\t  "
+                    <<"\t "<<((T_TORRENT *)torrents.at(i))->file_size <<endl;
+
+                cout<<"<================= pieces done=================>\n";
+                for(int j=0;j<((T_TORRENT *)torrents.at(i))->piece_number;j++)
+                {
+                    cout<<"\t   piece order"<<(T_TORRENT_PIECE *)(((T_TORRENT *)torrents.at(i))->pieces.at(j)) ->order<<"\t  "
+                       <<"\t    piece done"<<(T_TORRENT_PIECE *)(((T_TORRENT *)torrents.at(i))->pieces.at(j))->done<<"\t  "<<endl;
+                }
+                cout<<endl;
+                cout<<endl;
+            }
+
+>>>>>>> 36abe804264dca0d809f316098fd6cea194b8191
 
         }
     }

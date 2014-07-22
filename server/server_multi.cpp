@@ -365,7 +365,38 @@ fwrite(buff,1,n,fp);
                                    printf("msg:'%s  failed!\n", res_buf);
                                }
                             }
+                            else if(j_request_type==CLIENT_REQUEST_TYPE.READY_TO_RECEIVE_TORRENT_FROM_SERVER)
+                            {
+                                memset(res_buf,NULL,sizeof(res_buf));
+                                cout<<"a client want a torrent"<<endl;
+                                Json::Value parameters=jroot["parameters"];
+                                int j = 0;
+                                for(int i=0;i<parameters.size();i++)
+                                {
+                                    if(parameters[i].isMember("torrent_id"))
+                                    {
+                                        j=parameters[i]["torrent_id"].asInt();
+                                    }
+                                }
+                                T_TORRENT * torrent=(T_TORRENT *) torrents.at(j-1);
+                                FILE* fp;
+                                char data_buf[MAX_DATABUF + 1];
+                                fp = fopen(torrent->torrent_name.c_str(), "rb");
+                                int file_block_length = 0;
+                                while( (file_block_length = fread(data_buf, sizeof(char), MAX_DATABUF, fp)) > 0)
+                                {
 
+
+                                    // 发送buffer中的字符串到new_server_socket,实际上就是发送给客户端
+                                    if (send(sockfd, data_buf, file_block_length, 0) < 0)
+                                    {;
+                                        break;
+                                    }
+
+                                    bzero(data_buf, sizeof(data_buf));
+                                }
+                                fclose(fp);
+                            }
                             else if(j_request_type==CLIENT_REQUEST_TYPE.REQUEST_PEERLIST)
                             {
                                 cout<<endl<<" a client want to get peer list"<<endl;

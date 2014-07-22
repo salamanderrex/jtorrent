@@ -78,7 +78,7 @@ client
 $~{"request_type":14,"parameters":[{"torrent_id":1}]}~$
 
 server response
-$~{"response_tye":41,"parameters":[{"torrent_id":1},{"torrent_SHA":"thisissha","torrent_size":45]}~$
+$~{"response_tye":41,"parameters":[{"torrent_id":1,"torrent_SHA":"thisissha","torrent_size":45,"torrent_name":"1.avi.torrent"}]}~$
 
 client 
 $~{"request_tye":16,"parameters":[{"torrent_id":1},{"torrent_SHA":"thisissha"}]}~$

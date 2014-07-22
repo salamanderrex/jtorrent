@@ -137,6 +137,15 @@ public:
             root["parameters"]=parameters;
 
         }
+        else if(type==CLIENT_REQUEST_TYPE.READY_TO_RECEIVE_TORRENT_FROM_SERVER)
+        {
+            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+             parameter["torrent_id"]=torrent->torrent_id;
+             parameter["torrent_SHA"]=torrent->torrent_SHA;
+             parameters.append(parameter);
+             root["request_type"]=type;
+             root["parameters"]=parameters;
+        }
         retrunstr= jwriter.write(root);
         //   std::cout<<"in the writer"<<retrunstr<<endl;
         add_header_ender(retrunstr);
@@ -286,6 +295,7 @@ public:
             parameter["torrent_id"]=torrent->torrent_id;
             parameter["torrent_SHA"]=torrent->torrent_SHA;
             parameter["torrent_size"]=torrent->torrent_size;
+            parameter["torrent_name"]=torrent->torrent_name;
             parameters.append(parameter);
             root["response_type"]=type;
             root["parameters"]=parameters;
@@ -296,9 +306,10 @@ public:
             T_PEER_LIST *  peer_list= (T_PEER_LIST *)c_info_base;
 
             for(int i = 0; i < peer_list->uploader_list.size(); i++){
-                parameter["torrent_port"]=peer_list->uploader_list.at(i).port;
-                parameter["user_name"]=peer_list->uploader_list.at(i).user_name;
-                parameter["user_ip"]=peer_list->uploader_list.at(i).user_ip;
+                user_info* user = peer_list->uploader_list.at(i);
+                parameter["torrent_port"]=user->port;
+                parameter["user_name"]=user->user_name;
+                parameter["user_ip"]=user->user_ip;
             }
 
             parameters.append(parameter);

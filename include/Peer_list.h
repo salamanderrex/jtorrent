@@ -6,14 +6,6 @@
 #include "C_BASE.h"
 using namespace std;
 
-class user_info
-{
-public:
-    string user_name;
-    string user_ip;
-     int port;
-};
-
 class T_TORRENT_PIECE
 {
 public:
@@ -21,7 +13,20 @@ public:
     string location;
     int size;
     int order;
+    int done;
 };
+
+class user_info
+{
+public:
+    string user_name;
+    string user_ip;
+     int port;
+     int uploading_number;
+     vector <T_TORRENT_PIECE*> piece;
+};
+
+
 
 class T_PEER_LIST:public C_INFO_BASE
 {
@@ -37,8 +42,7 @@ public:
     }
 
     int torrent_id;
-    vector <T_TORRENT_PIECE> pieces;
-    vector <user_info> uploader_list;
+    vector <user_info*> uploader_list;
 };
 
 #endif PEER_LIST_H

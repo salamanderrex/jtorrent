@@ -120,21 +120,12 @@ void print_maenu()
           <<  "1.create a torrent file"<<endl
            <<  "2.upload the torrent file to the server"<<endl
             << "3.get the torrent list from the server"<<endl
-<<<<<<< HEAD
             << "4.get the torrent you want from server"<<endl
             << "5.get the peer list you want from server"<<endl
             <<  "6.start downloading file for specific torrent file."<<endl
              <<  "7.show the torrent file in local "<<endl
               <<  "8.check the connection status "<<endl
                <<  "9.exit"<<endl
-=======
-            << "4.get the torrent (peer list )you want from server"<<endl
-            <<  "5.start downloading file for specific torrent file."<<endl
-             <<  "6.show the torrent file in local "<<endl
-              <<  "7.check the connection status "<<endl
-               <<  "8.exit"<<endl
-
->>>>>>> 36abe804264dca0d809f316098fd6cea194b8191
                 <<  "========================================"<<endl
                  <<endl;
 }
@@ -257,7 +248,6 @@ void  *pthread_client_console(void *ptr)
 
 
             char    torrent_file_name [50];
-            char * IP_address;
             cout<<"give the torrent file name"<<endl;
             getchs(torrent_file_name);
 
@@ -351,13 +341,9 @@ void  *pthread_client_console(void *ptr)
             else
                 //server give positive respose
             {
-<<<<<<< HEAD
-                cout<<"server accept your upload request"<<endl;
-=======
                  int torrent_id_on_server=c_r_client.get_id_on_server(recv_data_buf);
                  uploading_torrent->torrent_id=torrent_id_on_server;
-                cout<<"server accepte your upload request"<<endl;
->>>>>>> 36abe804264dca0d809f316098fd6cea194b8191
+                cout<<"server accept your upload request"<<endl;
                 cout<<"now start sending"<<endl;
 
 
@@ -469,9 +455,71 @@ void  *pthread_client_console(void *ptr)
             int recv_n = recv(sockfd, recv_data_buf, MAX_DATABUF+1,0);
             temp=recv_data_buf;
             c_r_client.remove_header_ender(temp);
+            cout<<temp<<endl;
+            Json::Reader jreader;
+            Json::Value jroot;
+            std::cout<<temp<<endl;
+            if(!jreader.parse(temp,jroot,false))
+            {
+                std::cout<<"erro in json parse"<<endl;
+                continue;
+            }
+            Json::Value parameters=jroot["parameters"];
+            T_TORRENT * torrent = new T_TORRENT;
+            for(int i=0;i<parameters.size();i++)
+            {
+            torrent->torrent_id=parameters[i]["torrent_id"].asInt();
+            torrent->torrent_SHA=parameters[i]["torrent_SHA"].asString();
+            torrent->torrent_size=parameters[i]["torrent_size"].asInt();
+            torrent->torrent_name=parameters[i]["torrent_name"].asString();
+            }
 
+            get_torrent =  c_r_client.generate_request(CLIENT_REQUEST_TYPE.READY_TO_RECEIVE_TORRENT_FROM_SERVER,torrent);
+            send(sockfd, get_torrent.c_str(),strlen(get_torrent.c_str()),0);
+            cout<<"sending instruction finish "<<get_torrent<<endl;
+            string download_torrent = "./torrents/" + torrent->torrent_name;
+            ofstream out_stream;
+            out_stream.open(download_torrent.c_str(),ios::binary);
+            recv_n = 0;
+            int recv_size = 0;
+            while(1)
+            {
+                bzero(recv_data_buf, sizeof(recv_data_buf));
+                recv_n = recv(sockfd, recv_data_buf, MAX_DATABUF,0);
+                recv_size=recv_n+recv_size;
+                if (recv_n == 0) break;
+                out_stream<<recv_data_buf;
+                out_stream.flush();
+                if(recv_size==torrent->torrent_size)
+                    break;
+            }
+            fstream torrent_file_stream(download_torrent.c_str());
+            string readline;
+            getline(torrent_file_stream,readline);
+            torrent->file_size = atoi(readline.c_str());
+            getline(torrent_file_stream,readline);
+            torrent->piece_number=atoi(readline.c_str());
+            for(int i = 0; i < torrent->piece_number; i++)
+            {
+                T_TORRENT_PIECE* piece = new T_TORRENT_PIECE;
+                piece->done = 0;
+                piece->location = "./file/temp/";
+                piece->order = i+1;
+                getline(torrent_file_stream,readline);
+                piece->SHA = readline;
+                if(i == torrent->piece_number - 1) piece->size = torrent->file_size - 4096 * 1024 * i;
+                else piece->size = 4096 * 1024;
+                torrent->pieces.push_back(piece);
+            }
+            for(int i = 0; i < torrent->piece_number;i++)
+            {
+                T_TORRENT_PIECE * piece = torrent->pieces.at(i);
+                cout<<piece->SHA<<"\t"<<piece->size<<endl;
+            }
+            torrents.push_back(torrent);
             cout<<"closing socket"<<endl;
             close(sockfd);
+
         }
 
         else if(instruction_id=='5')
@@ -516,19 +564,35 @@ void  *pthread_client_console(void *ptr)
                 continue;
             }
 
+
+
             Json::Value parameters=jroot["parameters"];
             std::cout<<"parameters size is "<<parameters.size()<<endl;
-            Json::Value torrent_id=jroot["torrent_id"].asInt();
+            int torrent_id=jroot["torrent_id"].asInt();
 
-            cout<<"torrent id is "<<torrent_id<<end;
+            T_TORRENT *torrent;
+            for(int i = 0; i < torrents.size(); i++)
+            {
+                torrent = torrents.at(i);
+                if(torrent->torrent_id == torrent_id) break;
+            }
+
+            cout<<"torrent id is "<<torrent_id<<endl;
             for(int i=0;i<parameters.size();i++)
             {
-
+                user_info* user = new user_info;
+                T_PEER_LIST* peerlist = new T_PEER_LIST;
+                peerlist->torrent_id = torrent_id;
                 printf("\n");
-
-                cout<<"port is :["<<(parameters[i]["torrent_port"]).asInt()<<"]";
-                cout<<" peer name is  "<<parameters[i]["user_name"].asString();
-                cout<<"ip :" <<(parameters[i]["user_ip"]).asString()<<endl;
+                user->port = (parameters[i]["torrent_port"]).asInt();
+                cout<<"port is :["<<user->port<<"]";
+                user->user_name = parameters[i]["user_name"].asString();
+                cout<<" peer name is  "<< user->user_name << " ";
+                user->user_ip = (parameters[i]["user_ip"]).asString();
+                cout<<"ip :" <<user->user_ip<<endl;
+                user->uploading_number = 0;
+                peerlist->uploader_list.push_back(user);
+                torrent->peer_list = peerlist;
             }
 
 
@@ -539,10 +603,6 @@ void  *pthread_client_console(void *ptr)
             cout<<"closing socket"<<endl;
             close(sockfd);
         }
-<<<<<<< HEAD
-        else if(instruction_id=='5')
-        {
-=======
 
 
         else if (instruction_id=='6')
@@ -567,7 +627,6 @@ void  *pthread_client_console(void *ptr)
                 cout<<endl;
             }
 
->>>>>>> 36abe804264dca0d809f316098fd6cea194b8191
 
         }
     }

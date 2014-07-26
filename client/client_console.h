@@ -478,6 +478,7 @@ void  *pthread_client_console(void *ptr)
             torrent->torrent_size=parameters[i]["torrent_size"].asInt();
             torrent->torrent_name=parameters[i]["torrent_name"].asString();
             }
+            torrent->status = 0;
 
             get_torrent =  c_r_client.generate_request(CLIENT_REQUEST_TYPE.READY_TO_RECEIVE_TORRENT_FROM_SERVER,torrent);
             send(sockfd, get_torrent.c_str(),strlen(get_torrent.c_str()),0);
@@ -504,6 +505,7 @@ void  *pthread_client_console(void *ptr)
             torrent->file_size = atoi(readline.c_str());
             getline(torrent_file_stream,readline);
             torrent->piece_number=atoi(readline.c_str());
+            cout<<"piece number:"<<torrent->piece_number<<endl;
             for(int i = 0; i < torrent->piece_number; i++)
             {
                 T_TORRENT_PIECE* piece = new T_TORRENT_PIECE;
@@ -619,7 +621,7 @@ void  *pthread_client_console(void *ptr)
             {
 
                 cout<< "\t ["<<((T_TORRENT *)torrents.at(i))->torrent_id<< "] \t"<<((T_TORRENT *)torrents.at(i))->torrent_name<< "\t"<<((T_TORRENT *)torrents.at(i))->torrent_size<<"\t  "
-                    << "\t  "<<     ((T_TORRENT *)torrents.at(i))->status <<"\t"<<((T_TORRENT *)torrents.at(i))->piece_number<<"\t  "
+                    << "\t  "<<   ((T_TORRENT *)torrents.at(i))->piece_number  <<"\t"<< ((T_TORRENT *)torrents.at(i))->status<<"\t  "
                     <<"\t "<<((T_TORRENT *)torrents.at(i))->file_size <<endl;
 
                 cout<<"<================= pieces done=================>\n";

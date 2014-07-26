@@ -375,8 +375,22 @@ fwrite(buff,1,n,fp);
                                         j=parameters[i]["torrent_id"].asInt();
                                     }
                                 }
-                                //file1.seekg(1234, iso::cur);
-                            }
+                                T_TORRENT * torrent=(T_TORRENT *) torrents.at(j-1);
+                                 FILE* fp;
+                                 char data_buf[MAX_DATABUF + 1];
+                                 fp = fopen(torrent->torrent_name.c_str(), "rb");
+                                 int file_block_length = 0;
+                                 while( (file_block_length = fread(data_buf, sizeof(char), MAX_DATABUF, fp)) > 0)
+                                 {
+                                 // 发送buffer中的字符串到new_server_socket,实际上就是发送给客户端
+                                 if (send(sockfd, data_buf, file_block_length, 0) < 0)
+                                 {
+                                 break;
+                                 }
+                                 bzero(data_buf, sizeof(data_buf));
+                                 }
+                                 fclose(fp);
+                                 }
 
 
 

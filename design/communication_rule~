@@ -78,7 +78,7 @@ client
 $~{"request_type":14,"parameters":[{"torrent_id":1}]}~$
 
 server response
-$~{"response_tye":41,"parameters":[{"torrent_id":1},{"torrent_SHA":"thisissha"},{"torrent_size":45},{"torrent_name":"1.avi.torrent"}]}~$
+$~{"response_tye":41,"parameters":[{"torrent_id":1,"torrent_SHA":"thisissha","torrent_size":45,"torrent_name":"1.avi.torrent"}]}~$
 
 client 
 $~{"request_tye":16,"parameters":[{"torrent_id":1},{"torrent_SHA":"thisissha"}]}~$
@@ -117,12 +117,12 @@ $~{"response_type":71,"parameters":[{"torrent_id":1}]}~$
 bitfield phase:
 
 bitfield downloader  C_C REQUEST_BTFIELD=18
-$~{"request_type":18,"parameters":[{"torrent_id":1},{"p":"10101"}]}~$
+$~{"request_type":18,"parameters":[{"torrent_id":1,"p":""}]}~$
 
-NOTICE: in most case , the first parametes in p is empty
+NOTICE: in most case , the first parameters in p is empty
 
 bitfeld uploader C_C RESPONSE_BTFIELD=81
-$~{"response_type":81,"parameters":[{"torrent_id":1},{"p":"10101"},{"uploading_number":1}]}~$
+$~{"response_type":81,"parameters":[{"torrent_id":1,"p":"10101","uploading_number":1}]}~$
 
 NOTICE:uploading_number is how many client uploader is servering
 
@@ -131,14 +131,14 @@ NOTICE:uploading_number is how many client uploader is servering
 
 Request phase:
 the client downloader:
-$~{"request_type":19,"parameters":[{"torrent_id":1},{"p_index":1},{"begin":0},{"block_length":4096}]}~$
+$~{"request_type":19,"parameters":[{"torrent_id":1,"p_index":1,"begin":0,"block_length":4194304}]}~$
 
 then client  uploader
-$~{"response_type":91,"parameters":[{"torrent_id":1},{"p_index":1},{"begin":0},{"block_length":4096}]}~$
+$~{"response_type":91,"parameters":[{"torrent_id":1,"p_index":1,"begin":0,"block_length":4194304}]}~$
 
 
 then client downloader request  C_C_REQUESR_REQUEST_1=20
-$~{"request_type":20,"parameters":[{"torrent_id":1},{"p_index":1},{"begin":0},{"block_length":4096}]}~$
+$~{"request_type":20,"parameters":[{"torrent_id":1,"p_index":1,"begin":0,"block_length":4194304}]}~$
 
 then uploader response data
 

@@ -116,7 +116,42 @@ public:
     //others implement in the same way
     Json::FastWriter jwriter;
     Json::Reader jreader;
+    string generate_response(int type, C_INFO_BASE * c_info_base)
+    {
+        string retrunstr;
+        Json::Value root;
+        Json::Value parameter;
+        Json::Value parameters;
+        if(type == CLINET_RESPONSE_TYPE.C_C_REQUEST_SHAKE_HAND_REPLY)
+        {
+            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+             parameter["torrent_id"]=torrent->torrent_id;
+             parameters.append(parameter);
+             root["response_type"]=type;
+             root["parameters"]=parameters;
+        }
+        else if(type == CLINET_RESPONSE_TYPE.C_C_RESPONSE_BTFIELD)
+        {
+            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+            parameter["torrent_id"] = torrent->torrent_id;
+            string temp_bitfield;
+            for(int i = 0; i < torrent->pieces.size(); i++)
+            {
+                T_TORRENT_PIECE *piece = torrent->pieces.at(i);
+                if(piece->done == 0) temp_bitfield = temp_bitfield + "0";
+                else temp_bitfield = temp_bitfield + "1";
+            }
+            parameter["p"] = temp_bitfield;
+            parameter["uploading_number"] = torrent->uploading_number;
+            parameters.append(parameter);
+            root["response_type"]=type;
+            root["parameters"]=parameters;
+        }
 
+        retrunstr= jwriter.write(root);
+        add_header_ender(retrunstr);
+        return retrunstr;
+    }
     string generate_request(int type, C_INFO_BASE * c_info_base)
     {
         string retrunstr;

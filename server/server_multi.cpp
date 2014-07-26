@@ -166,9 +166,6 @@ int main(int argc, char** argv)
 
                             std::cout<<endl;
 
-                            printf("received data:%s\n from %s\n",buf,inet_ntoa(client[i].addr.sin_addr));
-                            std::cout<<std::endl;
-
                             //   while(1);
                             //detect the start of the instruction
                             string instruction=buf;
@@ -224,7 +221,7 @@ int main(int argc, char** argv)
                                 T_TORRENT * up_loading_torrent=new T_TORRENT();
                                 T_PEER_LIST *peer_list = new T_PEER_LIST();
                                 up_loading_torrent->peer_list=peer_list;
-                                user_info temp_uplader_info;
+                                user_info *temp_uplader_info = new user_info;
                                 up_loading_torrent->torrent_id=torrents.size()+1;
                                 peer_list->torrent_id = torrents.size()+1;
                                 //   info.user_ip = inet_ntoa(client[i].addr.sin_addr);
@@ -247,9 +244,9 @@ int main(int argc, char** argv)
                                     up_loading_torrent->torrent_size=parameters[i]["torrent_size"].asInt();
                                     std::cout<<"file name is"<< parameters[i]["torrent_size"].asInt()<<std::endl;
                                     up_loading_torrent->up_loader=parameters[i]["torrent_uploader"].asString();
-                                    temp_uplader_info.user_ip=inet_ntoa(client[i].addr.sin_addr);
-                                    temp_uplader_info.port=parameters[i]["torrent_port"].asInt();
-                                    temp_uplader_info.user_name=parameters[i]["torrent_uploader"].asString();
+                                    temp_uplader_info->user_ip=inet_ntoa(client[i].addr.sin_addr);
+                                    temp_uplader_info->port=parameters[i]["torrent_port"].asInt();
+                                    temp_uplader_info->user_name=parameters[i]["torrent_uploader"].asString();
                                     up_loading_torrent->peer_list->uploader_list.push_back(temp_uplader_info);
 
                                     // }
@@ -378,25 +375,11 @@ fwrite(buff,1,n,fp);
                                         j=parameters[i]["torrent_id"].asInt();
                                     }
                                 }
-                                T_TORRENT * torrent=(T_TORRENT *) torrents.at(j-1);
-                                FILE* fp;
-                                char data_buf[MAX_DATABUF + 1];
-                                fp = fopen(torrent->torrent_name.c_str(), "rb");
-                                int file_block_length = 0;
-                                while( (file_block_length = fread(data_buf, sizeof(char), MAX_DATABUF, fp)) > 0)
-                                {
-
-
-                                    // 发送buffer中的字符串到new_server_socket,实际上就是发送给客户端
-                                    if (send(sockfd, data_buf, file_block_length, 0) < 0)
-                                    {;
-                                        break;
-                                    }
-
-                                    bzero(data_buf, sizeof(data_buf));
-                                }
-                                fclose(fp);
+                                //file1.seekg(1234, iso::cur);
                             }
+
+
+
                             else if(j_request_type==CLIENT_REQUEST_TYPE.REQUEST_PEERLIST)
                             {
                                 cout<<endl<<" a client want to get peer list"<<endl;

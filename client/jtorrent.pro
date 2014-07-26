@@ -4,7 +4,8 @@ HEADERS += sha1.h \
     client_console.h \
     ../include/C_R.h \
     ../include/Torrent.h \
-    ../include/Peer_list.h
+    ../include/Peer_list.h \
+    ../include/C_BASE.h
 SOURCES += sha1.cpp \
     send.cpp \
     multi_client.cpp \

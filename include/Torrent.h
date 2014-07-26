@@ -39,7 +39,7 @@ public:
         this->torrent_SHA=SHA;
         this->file_size=file_size;
         this->piece_number=piece_number;
-
+        this->file_name = torrent_name.substr(0, torrent_name.find_last_of(".torrent") - 7);
     }
     int torrent_id;
     int torrent_size;
@@ -47,6 +47,7 @@ public:
     int file_size;
     string file_name;
     int status;
+    int uploading_number;
     string up_loader;
     string torrent_SHA;
     int piece_number;

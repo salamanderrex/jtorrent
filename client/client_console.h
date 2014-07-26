@@ -317,7 +317,7 @@ void  *pthread_client_console(void *ptr)
             //initialize the torrent class
             T_TORRENT * uploading_torrent =new T_TORRENT(torrent_file_name,size,c_r_client.user_name,SHA_RESULT,file_size,piece_number);
             //  std::cout<<uploading_torrent->torrent_name<<uploading_torrent->up_loader<<uploading_torrent->torrent_SHA<<endl;
-
+            uploading_torrent->uploading_number = 0;
             string send_requset=c_r_client.generate_request(CLIENT_REQUEST_TYPE.UPLOAD_TORRENT_INFO,uploading_torrent);
             std::cout<<send_requset<<endl<<"to "<<SERVER_IP_ADDRESS<<endl;
 
@@ -354,12 +354,17 @@ void  *pthread_client_console(void *ptr)
                 int file_block_length = 0;
                 while( (file_block_length = fread(data_buf, sizeof(char), MAX_DATABUF, fp)) > 0)
                 {
-                    T_TORRENT_PIECE  *tem_piece= new T_TORRENT_PIECE;
-                    tem_piece->done=1;
-                    tem_piece->order=current_order++;
-                    tem_piece->size=file_block_length;
-                    tem_piece->location=torrent_file_name;
-                    uploading_torrent->pieces.push_back( tem_piece);
+                    for(int i = 0; i < uploading_torrent->piece_number; i++)
+                    {
+                        T_TORRENT_PIECE  *tem_piece= new T_TORRENT_PIECE;
+                        tem_piece->done=1;
+                        tem_piece->order=current_order++;
+                        if(i == uploading_torrent->piece_number - 1) tem_piece->size = uploading_torrent->file_size - 4096 * 1024 * i;
+                        else tem_piece->size = 4096 * 1024;
+                        tem_piece->location=torrent_file_name;
+                        uploading_torrent->pieces.push_back( tem_piece);
+                    }
+
                     // uploading_torrent->++;
                     printf("file_block_length = %d\n", file_block_length);
 
@@ -621,7 +626,8 @@ void  *pthread_client_console(void *ptr)
                 for(int j=0;j<((T_TORRENT *)torrents.at(i))->piece_number;j++)
                 {
                     cout<<"\t   piece order"<<(T_TORRENT_PIECE *)(((T_TORRENT *)torrents.at(i))->pieces.at(j)) ->order<<"\t  "
-                       <<"\t    piece done"<<(T_TORRENT_PIECE *)(((T_TORRENT *)torrents.at(i))->pieces.at(j))->done<<"\t  "<<endl;
+                       <<"\t    piece done"<<(T_TORRENT_PIECE *)(((T_TORRENT *)torrents.at(i))->pieces.at(j))->done<<"\t  "
+                         <<"\t    piece done"<<(T_TORRENT_PIECE *)(((T_TORRENT *)torrents.at(i))->pieces.at(j))->size<<"\t  "<<endl;
                 }
                 cout<<endl;
                 cout<<endl;

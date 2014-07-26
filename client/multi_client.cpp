@@ -21,7 +21,6 @@
 
 #define MAXBUF 1024
 
-
  C_R_CLIENT c_r_client;
 
 typedef struct CLIENT {
@@ -188,8 +187,142 @@ int main(int argc, char** argv)
                         {
                             printf("received data:%s\n from %s\n",buf,inet_ntoa(client[i].addr.sin_addr));
                             std::cout<<std::endl;
+                            string instruction=buf;
+                            if(c_r_client.detect_STX(instruction)&c_r_client.detect_ETX(instruction))
+                            {
+                                c_r_client.remove_header_ender(instruction);
+                                std::cout<<"finish receive instruction from client, it is :"<<instruction<<std::endl;
+                            }
+                            else if(c_r_client.detect_STX(instruction))
 
+                            {
 
+                                memset(buf,0,MAXBUF);
+                                while(1)
+                                {
+                                    if((n = recv(sockfd,buf,MAXBUF,0)) > 0)
+                                    {
+                                        printf("received data:%s\n from %s\n",buf,inet_ntoa(client[i].addr.sin_addr));
+                                        std::cout<<std::endl;
+                                    }
+                                    instruction.append(buf);
+                                    string temp(buf);
+                                    if(c_r_client.detect_ETX(temp))
+                                    {
+                                        memset(buf,0,MAXBUF);
+                                        break;
+                                    }
+
+                                }
+                                std::cout<<"finish receive instruction from client"<<std::endl;
+                            }
+                            Json::Reader jreader;
+                            Json::Value jroot;
+
+                            if(!jreader.parse(instruction,jroot,false))
+                            {
+                                perror("json reader");
+                                exit(-1);
+                            }
+                            int j_request_type=jroot["request_type"].asInt();
+
+                            std::cout<<jroot["request_type"]<<std::endl;
+                            if(j_request_type==CLIENT_REQUEST_TYPE.C_C_REQUEST_SHAKE_HAND)
+                            {
+                                Json::Value parameters=jroot["parameters"];
+                                int i, j;
+                                T_TORRENT *torrent;
+                                for(i = 0; i < torrents.size(); i++)
+                                {
+                                    torrent = torrents.at(i);
+                                    for(j = 0; j < parameters.size(); j++)
+                                    {
+                                        if(torrent->torrent_id == parameters[j]["torrent_id"].asInt()) break;
+                                    }
+                                    if(j != parameters.size()) break;
+                                }
+                                if(i == torrents.size()) printf("invalid torrent id\n");
+                                else
+                                {
+                                    strcpy(res_buf,(c_r_client.generate_response(CLINET_RESPONSE_TYPE.C_C_REQUEST_SHAKE_HAND_REPLY,torrent)).c_str());
+                                    std::cout<<"server response:"<<res_buf<<std::endl;
+                                    int  len = send(sockfd, res_buf, strlen(res_buf) , 0);
+                                    if (len > 0)
+                                        printf("msg:%s send successful锛宼otalbytes: %d锛乗n", res_buf, len);
+                                    else {
+                                        printf("msg:'%s  failed!\n", res_buf);
+                                    }
+                                }
+                            }
+
+                            else if(j_request_type==CLIENT_REQUEST_TYPE.C_C_REQUEST_BTFIELD)
+                            {
+                                Json::Value parameters=jroot["parameters"];
+                                int i, j;
+                                T_TORRENT *torrent;
+                                for(i = 0; i < torrents.size(); i++)
+                                {
+                                    torrent = torrents.at(i);
+                                    for(j = 0; j < parameters.size(); j++)
+                                    {
+                                        if(torrent->torrent_id == parameters[j]["torrent_id"].asInt()) break;
+                                    }
+                                    if(j != parameters.size()) break;
+                                }
+                                if(i == torrents.size()) printf("invalid torrent id\n");
+                                else
+                                {
+                                    strcpy(res_buf,(c_r_client.generate_response(CLINET_RESPONSE_TYPE.C_C_RESPONSE_BTFIELD,torrent)).c_str());
+                                    std::cout<<"server response:"<<res_buf<<std::endl;
+                                    int  len = send(sockfd, res_buf, strlen(res_buf) , 0);
+                                    if (len > 0)
+                                        printf("msg:%s send successful锛宼otalbytes: %d锛乗n", res_buf, len);
+                                    else {
+                                        printf("msg:'%s  failed!\n", res_buf);
+                                    }
+                                }
+                            }
+                            else if(j_request_type==CLIENT_REQUEST_TYPE.C_C_REQUEST_REQUEST)
+                            {
+                                    Json::FastWriter jwriter;
+                                    jroot["request_type"] = CLINET_RESPONSE_TYPE.C_C_REQUEST_RESPONSE;
+                                    string returnstr= jwriter.write(jroot);
+                                    returnstr = "$~"+returnstr.substr(0,returnstr.size()-1)+"~$";
+                                    strcpy(res_buf,returnstr.c_str());
+                                    std::cout<<"server response:"<<res_buf<<std::endl;
+                                    int  len = send(sockfd, res_buf, strlen(res_buf) , 0);
+                                    if (len > 0)
+                                        printf("msg:%s send successful锛宼otalbytes: %d锛乗n", res_buf, len);
+                                    else {
+                                        printf("msg:'%s  failed!\n", res_buf);
+                                    }
+                            }
+                            else if(j_request_type == CLIENT_REQUEST_TYPE.C_C_REQUESR_REQUEST_1)
+                            {
+                                Json::Value parameters=jroot["parameters"];
+                                int i, j;
+                                T_TORRENT *torrent;
+                                for(i = 0; i < torrents.size(); i++)
+                                {
+                                    torrent = torrents.at(i);
+                                    for(j = 0; j < parameters.size(); j++) if(torrent->torrent_id == parameters[j]["torrent_id"].asInt()) break;
+                                    if(j != parameters.size()) break;
+                                }
+                                if(i == torrents.size()) printf("invalid torrent id\n");
+                                else
+                                {
+                                    T_TORRENT_PIECE* piece =  torrent->pieces.at(parameters[j]["p_index"].asInt() - 1);
+                                    char data_buf[MAXBUF * 4096 + 1];
+                                    FILE *fp;
+                                    fp = fopen(torrent->file_name.c_str(), "rb");
+                                    int file_block_length = 0;
+                                    cout <<torrent->file_name<<" "<< piece->order << endl;
+                                    for(int i = 0; i < piece->order; i++) file_block_length = fread(data_buf, 1, MAX_DATABUF * 1024, fp);
+                                    cout<<file_block_length<<endl;
+                                    send(sockfd, data_buf, file_block_length, 0);
+                                }
+                            }
+                            memset(res_buf,NULL,sizeof(res_buf));
 
                         }
                         else

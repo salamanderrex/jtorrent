@@ -1,10 +1,11 @@
+/*******************************************************************************
 ===================================================================================
 ==========		this file was created by jtorrent team1 	===========
 ==========		copyright belongs to UMJI_VE489_2014_TEAM1	===========
 ==========		Last modified date: 2014_7_26			===========
 ===================================================================================
 
-
+*********************************************************************************/
 
 #include <iostream>
 #include <vector>
@@ -126,7 +127,7 @@ int main()
 	//suspend
 	int * action_queue = new int[CLIENT_NUMBER]; //初始化数组;
 
-	while(1)
+	while(! everyone_done())
 	{
 	//print something
 	cout<<"==========================================="<<endl;
@@ -146,15 +147,16 @@ int main()
 
 	for(int i=0;i<CLIENT_NUMBER;i++)
 	{
+		cout<<"{"<<action_queue[i]<<"] kick round"<<endl;
 		client_list[action_queue[i]].kick_my_lazyiest_friend_to_betray();
 		client_list[action_queue[i]].kick_the_passbay();
 	}
 	//start allocate
 
-
 		for(int i=0;i<CLIENT_NUMBER;i++)
-	{
-		client_list[action_queue[i]].go_download_on_piece();
+	{	
+		cout<<"{"<<action_queue[i]<<"] request round"<<endl;
+		cout<<client_list[action_queue[i]].go_download_on_piece();
 		//just down 1 , whant to download more at one time ??
 			//client_list[action_queue[i]].go_download_on_piece();
 	}
@@ -165,7 +167,9 @@ int main()
 	//more simple , just check -1of each client, 
 
 	for(int i=0;i<CLIENT_NUMBER;i++)
-	{
+
+	{	
+		cout<<endl<<"{"<<action_queue[i]<<"}  update round"<<endl;
 		CLIENT temp=client_list[action_queue[i]];
 		//check -1
 		for(int j=0;j<PIECES_NUMBER;j++)
@@ -186,10 +190,43 @@ int main()
 		
 	}
 	}
-	turn++;
-	char input;
-	input=getchar();
+
+	/*
+	//print menifest
+	cout<<endl<<"------------ manifest-----------------------"<<endl;
+	for(int i=0;i<CLIENT_NUMBER;i++)
+	{
+		cout<<i<<" friend is :" ;
+			std::vector<PEER>::iterator pos=	client_list[i].up_friend_slot.begin();
+			 while(pos!=	client_list[i].up_friend_slot.end())
+			 {
+				 cout<<pos->peer_id<<" ";
+				 pos++;
+
+			 }
+
+			 cout<<endl;
+
 	}
+	cout<<endl<<"--------------------------------------------------"<<endl;
+	*/
+	turn++;
+
+
+
+	}
+
+
+	//final
+
+		cout<<"print G_pieces"<<endl;;
+	print_G_PIECES();
+
+	cout<<"all status"<<endl;
+	print_all_client_status();
+
+		char input;
+	input=getchar();
 	delete [] action_queue;
 
 

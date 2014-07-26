@@ -7,9 +7,9 @@ using namespace std;
 const int UP_SLOT_SIZE=4;			//do not specify this in the vector
 const int UP_SLOT_FRIEND_SIZE=3;
 const int UP_SLOT_PASSBY_SIZE=UP_SLOT_SIZE-UP_SLOT_FRIEND_SIZE;
-const int KICK_EACH_TURN=2;
+const int KICK_EACH_TURN=1;
 //const int DOWN_TABLE_SIZE=10;   well down table size seems unnecessay, what if a guy has a infinite download bandwidth
-const int PIECES_NUMBER=15;
+const int PIECES_NUMBER=10;
 const int CLIENT_NUMBER=6;
 
 //GOD LOVES PEOPLE, HE KNOWS EVERYTHING
@@ -166,8 +166,9 @@ class CLIENT
 		{
 			return -1;
 		}
-
-		try_fetch_piece_N(get_rarest_piece(own_what()));
+		int piece_want=get_rarest_piece(own_what());
+		cout<<endl<<"going to get ["<<piece_want<<endl;
+		return try_fetch_piece_N(piece_want);
 
 
 	}

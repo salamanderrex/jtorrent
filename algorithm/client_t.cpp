@@ -50,6 +50,7 @@ void vector_remove_value(vector  <int >  &input, int val )
               val);
    if (pos != input.end()) {
        input.erase(pos);
+		
    }
 }
 
@@ -62,6 +63,27 @@ int CLIENT:: try_fetch_piece_N(int piece_id)
 			if(client_list[up_friend_slot[i].peer_id].has_specific_piece_N(piece_id))
 			{
 				cout<<"I am"<<client_id<<"yep , my friend{"<<up_friend_slot[i].peer_id<<"} has ["<<piece_id<<"]"<<endl;
+				up_friend_slot[i].up_number++;
+
+				//increase the down number in my friend
+				//first find myself
+				
+				 std::vector<PEER>::iterator pos=	client_list[up_friend_slot[i].peer_id].up_friend_slot.begin();
+			 while(pos!=	client_list[up_friend_slot[i].peer_id].up_friend_slot.end())
+			 {
+				 if(pos->peer_id==myself.peer_id)	//delete me from his friend list
+				 {
+					 pos->down_number++;
+
+					 break;
+
+				 }
+				 else
+				 pos++;
+
+			 }
+
+
 				//insert my self int uploader's table
 				client_list[up_friend_slot[i].peer_id].down_table.push_back(myself);
 				//set my piece be downing
@@ -70,14 +92,14 @@ int CLIENT:: try_fetch_piece_N(int piece_id)
 			}
 		}
 
-
+		cout<<"my friend do no have that "<<endl; 
 		//ask GOD who has piece
 		//since my friend do not have  i do not need to worry about select them again
 		vector <int> targets=G_pieces[piece_id];
 		int random_target=-1;
 		while(targets.size()>0)
 		{
-			random_target=get_random_number(0,targets.size());
+			random_target=targets.at(get_random_number(0,targets.size()));
 
 			if(am_I_hate_him(random_target))
 			{

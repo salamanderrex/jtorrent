@@ -24,7 +24,7 @@ public :
         C_C_REQUEST_BTFIELD=18,
         C_C_REQUEST_REQUEST=19,
         C_C_HAVE=18,
-        C_C_REQUESR_REQUEST_1=20
+        C_C_REQUEST_REQUEST_1=20
         //  UP_LOAD_FILE=14
     };
 };
@@ -55,7 +55,7 @@ public :
 
 extern T_CLIENT_REQUEST_TYPE CLIENT_REQUEST_TYPE;
 extern T_SERVER_RESPONSE SERVER_RESPONSE_TYPE;
-extern T_CLIENT_RESPONSE_TYPE CLINET_RESPONSE_TYPE;
+extern T_CLIENT_RESPONSE_TYPE CLIENT_RESPONSE_TYPE;
 class C_R
 {
 public:
@@ -145,6 +145,45 @@ public:
              parameters.append(parameter);
              root["request_type"]=type;
              root["parameters"]=parameters;
+        }
+        else if(type == CLIENT_REQUEST_TYPE.C_C_REQUEST_SHAKE_HAND){
+            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+            root["request_type"]=type;
+            parameter["torrent_id"]=torrent->torrent_id;
+            root["parameters"]=parameters;
+        }
+        else if(type == CLIENT_RESPONSE_TYPE.C_C_REQUEST_SHAKE_HAND_REPLY){
+            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+            root["request_type"]=type;
+            parameter["torrent_id"]=torrent->torrent_id;
+            root["parameters"]=parameters;
+        }
+        else if(type == CLIENT_REQUEST_TYPE.C_C_REQUEST_BTFIELD){
+            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+            root["request_type"]=type;
+            parameter["torrent_id"]=torrent->torrent_id;
+            string s = new string(torrent->bitfield);
+            parameter["p"] = s;
+            delete s;
+        }
+        else if(type == CLIENT_RESPONSE_TYPE.C_C_RESPONSE_BTFIELD){
+            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+            root["request_type"]=type;
+            parameter["torrent_id"]=torrent->torrent_id;
+            string s = new string(torrent->bitfield);
+            parameter["p"] = s;
+            parameter["uploading_number"] = torrent->uploading_number;
+            delete s;
+        }
+        else if (type == CLIENT_REQUEST_TYPE.C_C_REQUEST_REQUEST){
+            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+            root["request_type"]=type;
+            parameter["torrent_id"]=torrent->torrent_id;
+            parameter["p_index"]=
+
+        }
+        else if (type == CLIENT_RESPONSE_TYPE.C_C_REQUEST_RESPONSE){
+
         }
         retrunstr= jwriter.write(root);
         //   std::cout<<"in the writer"<<retrunstr<<endl;

@@ -110,7 +110,7 @@ void hexPrinter( unsigned char* c, int l, FILE* torrent )
     fprintf(torrent, "\n");
 }
 
-void print_maenu()
+void print_menu()
 {
 
     std::cout<<"====================================="<<endl
@@ -148,7 +148,7 @@ void  *pthread_client_console(void *ptr)
         servaddr.sin_port= htons(SERVER_PORT);
         inet_pton(AF_INET, SERVER_IP_ADDRESS.c_str(), &servaddr.sin_addr);
 
-        print_maenu();
+        print_menu();
         while (!kbhit()) {
             /* do some work */
         }
@@ -164,7 +164,7 @@ void  *pthread_client_console(void *ptr)
 
         {
             system("clear");
-            print_maenu();
+            print_menu();
             continue;
         }
         else   if(instruction_id=='1')
@@ -372,6 +372,15 @@ void  *pthread_client_console(void *ptr)
 
                     bzero(data_buf, sizeof(data_buf));
                 }
+                memset(uploading_torrent->bitfield, '0', sizeof(char)*300);
+                for (int i = 0; i < uploading_torrent->piece_number; i++){
+                    uploading_torrent->bitfield[i] = '1';
+                }
+                uploading_torrent->bitfield[uploading_torrent->piece_number] = '-1';
+                for (int i = 0; i < 300; i ++){
+                    cout << uploading_torrent->bitfield[i];
+                }
+                cout << endl;
                 fclose(fp);
                 printf("File:\t%s Transfer Finished!\n", torrent_file_name);
 
@@ -379,10 +388,6 @@ void  *pthread_client_console(void *ptr)
 
                 torrents.push_back(uploading_torrent);
                 uploading_torrent->status=1;
-
-
-
-
             }
             cout<<"closing socket"<<endl;
             close(sockfd);
@@ -499,6 +504,7 @@ void  *pthread_client_console(void *ptr)
             torrent->file_size = atoi(readline.c_str());
             getline(torrent_file_stream,readline);
             torrent->piece_number=atoi(readline.c_str());
+            memset(torrent->bitfield, '0', sizeof(char)*300);
             for(int i = 0; i < torrent->piece_number; i++)
             {
                 T_TORRENT_PIECE* piece = new T_TORRENT_PIECE;

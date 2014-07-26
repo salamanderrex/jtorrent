@@ -224,7 +224,7 @@ int main(int argc, char** argv)
                                 T_TORRENT * up_loading_torrent=new T_TORRENT();
                                 T_PEER_LIST *peer_list = new T_PEER_LIST();
                                 up_loading_torrent->peer_list=peer_list;
-                                user_info temp_uplader_info;
+                                user_info *temp_uplader_info = new user_info();
                                 up_loading_torrent->torrent_id=torrents.size()+1;
                                 peer_list->torrent_id = torrents.size()+1;
                                 //   info.user_ip = inet_ntoa(client[i].addr.sin_addr);
@@ -247,9 +247,9 @@ int main(int argc, char** argv)
                                     up_loading_torrent->torrent_size=parameters[i]["torrent_size"].asInt();
                                     std::cout<<"file name is"<< parameters[i]["torrent_size"].asInt()<<std::endl;
                                     up_loading_torrent->up_loader=parameters[i]["torrent_uploader"].asString();
-                                    temp_uplader_info.user_ip=inet_ntoa(client[i].addr.sin_addr);
-                                    temp_uplader_info.port=parameters[i]["torrent_port"].asInt();
-                                    temp_uplader_info.user_name=parameters[i]["torrent_uploader"].asString();
+                                    temp_uplader_info->user_ip=inet_ntoa(client[i].addr.sin_addr);
+                                    temp_uplader_info->port=parameters[i]["torrent_port"].asInt();
+                                    temp_uplader_info->user_name=parameters[i]["torrent_uploader"].asString();
                                     up_loading_torrent->peer_list->uploader_list.push_back(temp_uplader_info);
 
                                     // }

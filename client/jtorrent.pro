@@ -10,7 +10,12 @@ SOURCES += sha1.cpp \
     multi_client.cpp \
     ../include/C_R.cpp
 
-unix:!macx:!symbian: LIBS += -L$$PWD/../lib/ -ljsonlib
+#unix:!macx:!symbian: LIBS += -L$$PWD/../lib/ -ljsonlib
+
+#INCLUDEPATH += $$PWD/../include
+#DEPENDPATH += $$PWD/../include
+
+unix:!macx: LIBS += -L$$PWD/../lib/ -ljsoncpp
 
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include

@@ -116,12 +116,12 @@ void print_maenu()
     std::cout<<"====================================="<<endl
             <<"torrent main panel"<<endl
            <<"====================================="<<endl
-          << "hello user : username"<<endl
+          << "hello user : "<<c_r_client.user_name<<endl
           <<  "1.create a torrent file"<<endl
            <<  "2.upload the torrent file to the server"<<endl
             << "3.get the torrent list from the server"<<endl
             << "4.get the torrent you want from server"<<endl
-            << "5.get the peer list you want from server"<<endl
+            << "5.get the peer list you want from server [ after 4.]"<<endl
             <<  "6.start downloading file for specific torrent file."<<endl
              <<  "7.show the torrent file in local "<<endl
               <<  "8.check the connection status "<<endl
@@ -595,6 +595,13 @@ void  *pthread_client_console(void *ptr)
                 cout<<"port is :["<<user->port<<"]";
                 user->user_name = parameters[i]["user_name"].asString();
                 cout<<" peer name is  "<< user->user_name << " ";
+                if(user->user_name==c_r_client.user_name)
+                {
+                    cout<<"myself"<<endl;
+                    delete user;
+                    delete peerlist;
+                    continue;
+                }
                 user->user_ip = (parameters[i]["user_ip"]).asString();
                 cout<<"ip :" <<user->user_ip<<endl;
                 user->uploading_number = 0;

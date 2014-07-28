@@ -43,7 +43,7 @@ public:
         this->file_size=file_size;
         this->piece_number=piece_number;
         this->uploading_number=0;
-
+        this->file_name = torrent_name.substr(0, torrent_name.find_last_of(".torrent") - 7);
     }
     int torrent_id;
     int torrent_size;
@@ -51,11 +51,10 @@ public:
     int file_size;
     string file_name;
     int status;
+    int uploading_number;
     string up_loader;
     string torrent_SHA;
     int piece_number;
-    int uploading_number;
-    char bitfield[300];//upper limit for file size is 300*4MB = 1200MB, need initialization when generate a torrent
     vector <T_TORRENT_PIECE *> pieces;
     T_PEER_LIST * peer_list;    //does this need modify when we delete the torrent and its peer list?????
 };

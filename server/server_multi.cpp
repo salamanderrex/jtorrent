@@ -166,9 +166,6 @@ int main(int argc, char** argv)
 
                             std::cout<<endl;
 
-                            printf("received data:%s\n from %s\n",buf,inet_ntoa(client[i].addr.sin_addr));
-                            std::cout<<std::endl;
-
                             //   while(1);
                             //detect the start of the instruction
                             string instruction=buf;
@@ -379,24 +376,24 @@ fwrite(buff,1,n,fp);
                                     }
                                 }
                                 T_TORRENT * torrent=(T_TORRENT *) torrents.at(j-1);
-                                FILE* fp;
-                                char data_buf[MAX_DATABUF + 1];
-                                fp = fopen(torrent->torrent_name.c_str(), "rb");
-                                int file_block_length = 0;
-                                while( (file_block_length = fread(data_buf, sizeof(char), MAX_DATABUF, fp)) > 0)
-                                {
+                                 FILE* fp;
+                                 char data_buf[MAX_DATABUF + 1];
+                                 fp = fopen(torrent->torrent_name.c_str(), "rb");
+                                 int file_block_length = 0;
+                                 while( (file_block_length = fread(data_buf, sizeof(char), MAX_DATABUF, fp)) > 0)
+                                 {
+                                 // 发送buffer中的字符串到new_server_socket,实际上就是发送给客户端
+                                 if (send(sockfd, data_buf, file_block_length, 0) < 0)
+                                 {
+                                 break;
+                                 }
+                                 bzero(data_buf, sizeof(data_buf));
+                                 }
+                                 fclose(fp);
+                                 }
 
 
-                                    // 发送buffer中的字符串到new_server_socket,实际上就是发送给客户端
-                                    if (send(sockfd, data_buf, file_block_length, 0) < 0)
-                                    {;
-                                        break;
-                                    }
 
-                                    bzero(data_buf, sizeof(data_buf));
-                                }
-                                fclose(fp);
-                            }
                             else if(j_request_type==CLIENT_REQUEST_TYPE.REQUEST_PEERLIST)
                             {
                                 cout<<endl<<" a client want to get peer list"<<endl;

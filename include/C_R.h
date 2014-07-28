@@ -48,7 +48,7 @@ public :
         TORRENT_LIST	=51,
         UPLOAD_TORRENT_INFO=21,
         RESPONSE_PEERLIST=31,
-        DOWNLOAD_TORRENT=41,
+        DOWNLOAD_TORRENT=41
         //   UP_LOAD_FILE=41
     };
 };
@@ -116,7 +116,42 @@ public:
     //others implement in the same way
     Json::FastWriter jwriter;
     Json::Reader jreader;
+    string generate_response(int type, C_INFO_BASE * c_info_base)
+    {
+        string retrunstr;
+        Json::Value root;
+        Json::Value parameter;
+        Json::Value parameters;
+        if(type == CLIENT_RESPONSE_TYPE.C_C_REQUEST_SHAKE_HAND_REPLY)
+        {
+            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+             parameter["torrent_id"]=torrent->torrent_id;
+             parameters.append(parameter);
+             root["response_type"]=type;
+             root["parameters"]=parameters;
+        }
+        else if(type == CLIENT_RESPONSE_TYPE.C_C_RESPONSE_BTFIELD)
+        {
+            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+            parameter["torrent_id"] = torrent->torrent_id;
+            string temp_bitfield;
+            for(int i = 0; i < torrent->pieces.size(); i++)
+            {
+                T_TORRENT_PIECE *piece = torrent->pieces.at(i);
+                if(piece->done == 0) temp_bitfield = temp_bitfield + "0";
+                else temp_bitfield = temp_bitfield + "1";
+            }
+            parameter["p"] = temp_bitfield;
+            parameter["uploading_number"] = torrent->uploading_number;
+            parameters.append(parameter);
+            root["response_type"]=type;
+            root["parameters"]=parameters;
+        }
 
+        retrunstr= jwriter.write(root);
+        add_header_ender(retrunstr);
+        return retrunstr;
+    }
     string generate_request(int type, C_INFO_BASE * c_info_base)
     {
         string retrunstr;
@@ -148,42 +183,25 @@ public:
         }
         else if(type == CLIENT_REQUEST_TYPE.C_C_REQUEST_SHAKE_HAND){
             T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
-            root["request_type"]=type;
             parameter["torrent_id"]=torrent->torrent_id;
+            parameters.append(parameter);
+            root["request_type"]=type;
             root["parameters"]=parameters;
         }
-        else if(type == CLIENT_RESPONSE_TYPE.C_C_REQUEST_SHAKE_HAND_REPLY){
+        else if(type == CLIENT_REQUEST_TYPE.C_C_REQUEST_BTFIELD){           
             T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
+            parameter["torrent_id"] = torrent->torrent_id;
+            string temp_bitfield;
+            for(int i = 0; i < torrent->pieces.size(); i++)
+            {
+                T_TORRENT_PIECE *piece = torrent->pieces.at(i);
+                if(piece->done == 0) temp_bitfield = temp_bitfield + "0";
+                else temp_bitfield = temp_bitfield + "1";
+            }
+            parameter["p"] = temp_bitfield;
+            parameters.append(parameter);
             root["request_type"]=type;
-            parameter["torrent_id"]=torrent->torrent_id;
             root["parameters"]=parameters;
-        }
-        else if(type == CLIENT_REQUEST_TYPE.C_C_REQUEST_BTFIELD){
-            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
-            root["request_type"]=type;
-            parameter["torrent_id"]=torrent->torrent_id;
-            string s = new string(torrent->bitfield);
-            parameter["p"] = s;
-            delete s;
-        }
-        else if(type == CLIENT_RESPONSE_TYPE.C_C_RESPONSE_BTFIELD){
-            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
-            root["request_type"]=type;
-            parameter["torrent_id"]=torrent->torrent_id;
-            string s = new string(torrent->bitfield);
-            parameter["p"] = s;
-            parameter["uploading_number"] = torrent->uploading_number;
-            delete s;
-        }
-        else if (type == CLIENT_REQUEST_TYPE.C_C_REQUEST_REQUEST){
-            T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
-            root["request_type"]=type;
-            parameter["torrent_id"]=torrent->torrent_id;
-            parameter["p_index"]=
-
-        }
-        else if (type == CLIENT_RESPONSE_TYPE.C_C_REQUEST_RESPONSE){
-
         }
         retrunstr= jwriter.write(root);
         //   std::cout<<"in the writer"<<retrunstr<<endl;
@@ -191,7 +209,36 @@ public:
         //     std::cout<<"in the writer"<<retrunstr<<endl;
         return retrunstr;
     }
-
+    //for downloader request begin to downloading
+    string generate_request(int type, int p_index, int torrent_id){
+        string retrunstr;
+        Json::Value root;
+        Json::Value parameter;
+        Json::Value parameters;
+        if (type == CLIENT_REQUEST_TYPE.C_C_REQUEST_REQUEST){
+            parameter["torrent_id"]=torrent_id;
+            parameter["p_index"]= p_index;
+            parameter["begin"] = 0;
+            parameter["block_length"] = 4194304;
+            parameters.append(parameter);
+            root["request_type"]=type;
+            root["parameters"] = parameters;
+        }
+        else if (type == CLIENT_REQUEST_TYPE.C_C_REQUEST_REQUEST_1){
+            parameter["torrent_id"]=torrent_id;
+            parameter["p_index"]= p_index;
+            parameter["begin"] = 0;
+            parameter["block_length"] = 4194304;
+            parameters.append(parameter);
+            root["request_type"]=type;
+            root["parameters"] = parameters;
+        }
+        retrunstr= jwriter.write(root);
+        //   std::cout<<"in the writer"<<retrunstr<<endl;
+        add_header_ender(retrunstr);
+        //     std::cout<<"in the writer"<<retrunstr<<endl;
+        return retrunstr;
+    }
 
     int get_reponse_ack(string instruction)
     {

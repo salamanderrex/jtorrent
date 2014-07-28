@@ -12,15 +12,26 @@
 #include <string>
 #include <sstream>
 #include "Torrent.h"
+#include <semaphore.h>
 #include "C_R.h"
+#include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #define MAX_DATABUF 4096
 char data_buf[MAX_DATABUF + 1];
-
+sem_t ** mutex7;
+struct timespec delay;
 extern vector <T_TORRENT *> torrents;
 
 extern C_R_CLIENT c_r_client;
 struct termios orig_termios;
-
+struct download_info{
+    int sockfd;
+    int p_index;
+    int uploader;
+    T_TORRENT* torrent;
+};
 void reset_terminal_mode()
 {
     tcsetattr(0, TCSANOW, &orig_termios);
@@ -129,6 +140,226 @@ void print_menu()
                 <<  "========================================"<<endl
                  <<endl;
 }
+int * route_in_use;
+void *pthread_downloader(void *arg){
+    int sockfd = ((struct download_info *) arg)->sockfd;
+    int p_index = ((struct download_info *) arg)->p_index;
+    int uploader = ((struct download_info *) arg)->uploader;
+    T_TORRENT* torrent = ((struct download_info *) arg)->torrent;
+    printf("sem_wait mutex7[%d]\n",uploader);
+    sem_wait(mutex7[uploader]);
+
+    string send_request;
+    char recv_data_buf[MAX_DATABUF+1];
+    FILE* fp = NULL;
+    char filename[20];
+    sprintf(filename,"%d.piece",p_index);
+    fp = fopen(filename, "ab");
+    if (fp == NULL) printf("open binary file failed\n");
+
+    //send request 19
+    send_request = c_r_client.generate_request(CLIENT_REQUEST_TYPE.C_C_REQUEST_REQUEST, p_index, torrent->torrent_id);
+    printf("send: %s\n", send_request.c_str());
+    send(sockfd, send_request.c_str(),strlen(send_request.c_str()),0);
+
+    //wait the server respones
+    if (recv(sockfd, recv_data_buf, MAX_DATABUF,0) != -1){
+        printf("receive: %s\n",recv_data_buf);
+        send_request = c_r_client.generate_request(CLIENT_REQUEST_TYPE.C_C_REQUEST_REQUEST_1,p_index, torrent->torrent_id);
+        printf("send: %s\n", send_request.c_str());
+
+        //send request 20
+        send(sockfd, send_request.c_str(),strlen(send_request.c_str()),0);
+        int totalbytes = 0;
+        int len = 1;
+        while(totalbytes < 4096*1024){
+            printf("received total bytes are %f KB\n",totalbytes/1024.0);
+            len = recv(sockfd, recv_data_buf, MAX_DATABUF, 0);
+            fwrite(recv_data_buf,1,len,fp);
+            totalbytes += len;
+        }
+        printf("totalbytes received %d bytes\n", totalbytes);
+    }
+    else {
+        printf("instruction 91 receive failed\n");
+    }
+    fclose(fp);
+    //change done bit in the torrent-> pieces.at(i)
+    torrent->pieces.at(p_index-1)->done = 1;
+    printf("sem_post mutex7[%d]\n",uploader);
+    sem_post(mutex7[uploader]);
+}
+
+void  downloader(){
+    int torrent_id;
+    cout<<"give the torrent id of the file you want to download"<<endl;
+    cin >> torrent_id;
+
+    int i;
+    T_TORRENT *torrent;
+    for(i = 0; i < torrents.size(); i++)
+    {
+        torrent = torrents.at(i);
+        if(torrent->torrent_id == torrent_id) {
+            break;
+        }
+    }
+    if(i == torrents.size()) {
+        cout << "invalid torrent name" <<endl;
+        exit(0);
+    }
+
+    int err;
+    void* retval;
+    int sockfd[torrent->peer_list->uploader_list.size()];
+    struct sockaddr_in servaddr[torrent->peer_list->uploader_list.size()];
+    for (int i = 0; i < torrent->peer_list->uploader_list.size(); i++){
+        string ip_address;
+        ip_address = torrent->peer_list->uploader_list.at(i)->user_ip;
+
+        //socket initialization        
+        sockfd[i] = socket(AF_INET, SOCK_STREAM, 0);
+        memset(&servaddr[i], 0, sizeof(servaddr[i]));
+        servaddr[i].sin_family = AF_INET;
+        servaddr[i].sin_port= htons(1235);
+        inet_pton(AF_INET, ip_address.c_str(), &servaddr[i].sin_addr);
+        if (connect(sockfd[i], (struct sockaddr*)&servaddr[i],sizeof(servaddr[i]))<0){
+            cout << "downloader connect uploader"<<ip_address<<" failed"<<endl;
+            continue;
+        }
+
+        char recv_data_buf[MAX_DATABUF+1];
+        string send_request;
+
+        //  send request 17
+        send_request = c_r_client.generate_request(CLIENT_REQUEST_TYPE.C_C_REQUEST_SHAKE_HAND, torrent);
+        cout<<send_request<<" to "<<ip_address<<endl;
+        send(sockfd[i], send_request.c_str(),strlen(send_request.c_str()),0);
+
+        //wait the server respones
+        if (recv(sockfd[i], recv_data_buf, MAX_DATABUF,0) != -1){
+            //printf("%s\n",recv_data_buf);
+        }
+        else {
+            printf("instruction 71 receive failed\n");
+            continue;
+        }
+        //send request 18
+        send_request = c_r_client.generate_request(CLIENT_REQUEST_TYPE.C_C_REQUEST_BTFIELD, torrent);
+        cout<<send_request<<" to "<<ip_address<<endl;
+        send(sockfd[i], send_request.c_str(),strlen(send_request.c_str()),0);
+        //printf("sending instruction: \n");
+
+        //wait the server respones
+        if (recv(sockfd[i], recv_data_buf, MAX_DATABUF,0) != -1){
+            //printf("%s\n",recv_data_buf);
+        }
+        else {
+            printf("instruction 81 receive failed");
+            continue;
+        }
+
+        string instruction=recv_data_buf;
+        if(c_r_client.detect_STX(instruction)&c_r_client.detect_ETX(instruction)){
+            c_r_client.remove_header_ender(instruction);
+            //std::cout<<"finish receive instruction from client, it is :"<<instruction<<std::endl;
+        }
+        Json::Reader jreader;
+        Json::Value jroot;
+        if(!jreader.parse(instruction,jroot,false))
+        {
+            std::cout<<"erro in json parse"<<endl;
+            continue;
+        }
+
+        string p;
+        Json::Value parameters=jroot["parameters"];
+        for(int j = 0;j < parameters.size(); j++)
+        {
+            p = (parameters[j]["p"]).asString();
+        }
+        for (int j = 1; j <= torrent->piece_number; j++){
+            T_TORRENT_PIECE* piece = new T_TORRENT_PIECE;
+            piece->order = j;
+            piece->done = p[j-1]-48;
+            torrent->peer_list->uploader_list.at(i)->piece.push_back(piece);
+        }
+    }
+    pthread_t* downloader = new pthread_t[torrent->piece_number];
+    mutex7 = new sem_t*[torrent->peer_list->uploader_list.size()];
+    for (int i = 0; i < torrent->peer_list->uploader_list.size(); i++){
+        char sem_name[20];
+        sprintf(sem_name,"mutex7[%d]",i);
+        mutex7[i] = sem_open(sem_name,O_CREAT,0644,1);
+        if(mutex7[i] == SEM_FAILED){
+            printf("can't create semaphore mutex7[i]\n",i);
+            sem_unlink(sem_name);
+            exit(-1);
+        }
+    }
+    int *have = new int[torrent->peer_list->uploader_list.size()];
+    memset(have,0,sizeof(int)*torrent->peer_list->uploader_list.size());
+    for (int i = 0, count = 0; i<torrent->piece_number; i++){
+        for (int j = 0; j < torrent->peer_list->uploader_list.size(); j++){
+            if(torrent->peer_list->uploader_list.at(j)->piece.at(i)->done == 1){
+                count ++;
+                have[j] = 1;
+            }
+            if (j == torrent->peer_list->uploader_list.size()-1){
+                if (count == 0){
+                    printf("no one have this piece\n");
+                            exit(1);
+                }
+                int random_uploader = rand()%count;
+                int index = 0;
+                while (random_uploader+1){
+                    if(have[index] != 1){
+                        index ++;
+                        continue;
+                    }
+                    else random_uploader--;
+                }
+                int ret;
+
+                struct download_info *ThreadArgs = (struct download_info *)malloc(sizeof(struct download_info));
+                if (ThreadArgs == NULL){
+                    printf("malloc failed\n");
+                    exit(1);
+                }
+                ThreadArgs->sockfd = sockfd[j];
+                ThreadArgs->p_index = i+1;
+                ThreadArgs->uploader = index;
+                ThreadArgs->torrent = torrent;
+                ret=pthread_create(&downloader[i], NULL, pthread_downloader, ThreadArgs);
+                if (ret != 0){
+                    printf("can't create thread: %d\n", i);
+                    exit(0);
+                }
+            }
+        }
+    }
+    for(i = 0; i < torrent->piece_number; i ++){
+        err = pthread_join(downloader[i], &retval);
+        if (err != 0){
+            printf("can't join with thread: %d\n", i);
+            exit(0);
+        }
+    }
+    //close(sockfd[]);
+    for (int i = 0; i < torrent->peer_list->uploader_list.size(); i++){
+        char sem_name[20];
+        sprintf(sem_name,"mutex7[%d]",i);
+        sem_close(mutex7[i]);
+        sem_unlink(sem_name);
+    }
+
+    //sem_destroy(&mutex7);
+    cout<<"closing socket"<<endl;
+    for (int i = 0; i < torrent->peer_list->uploader_list.size(); i++){
+        close(sockfd[i]);
+    }
+    delete []downloader;
+}
 void  *pthread_client_console(void *ptr)
 {
 
@@ -140,7 +371,7 @@ void  *pthread_client_console(void *ptr)
 
 
     while(1)
-    {  int sockfd;
+    {   int sockfd;
         struct sockaddr_in servaddr;
         sockfd = socket(AF_INET, SOCK_STREAM, 0);
         memset(&servaddr, 0, sizeof(servaddr));
@@ -317,7 +548,7 @@ void  *pthread_client_console(void *ptr)
             //initialize the torrent class
             T_TORRENT * uploading_torrent =new T_TORRENT(torrent_file_name,size,c_r_client.user_name,SHA_RESULT,file_size,piece_number);
             //  std::cout<<uploading_torrent->torrent_name<<uploading_torrent->up_loader<<uploading_torrent->torrent_SHA<<endl;
-
+            uploading_torrent->uploading_number = 0;
             string send_requset=c_r_client.generate_request(CLIENT_REQUEST_TYPE.UPLOAD_TORRENT_INFO,uploading_torrent);
             std::cout<<send_requset<<endl<<"to "<<SERVER_IP_ADDRESS<<endl;
 
@@ -354,12 +585,17 @@ void  *pthread_client_console(void *ptr)
                 int file_block_length = 0;
                 while( (file_block_length = fread(data_buf, sizeof(char), MAX_DATABUF, fp)) > 0)
                 {
-                    T_TORRENT_PIECE  *tem_piece= new T_TORRENT_PIECE;
-                    tem_piece->done=1;
-                    tem_piece->order=current_order++;
-                    tem_piece->size=file_block_length;
-                    tem_piece->location=torrent_file_name;
-                    uploading_torrent->pieces.push_back( tem_piece);
+                    for(int i = 0; i < uploading_torrent->piece_number; i++)
+                    {
+                        T_TORRENT_PIECE  *tem_piece= new T_TORRENT_PIECE;
+                        tem_piece->done=1;
+                        tem_piece->order=current_order++;
+                        if(i == uploading_torrent->piece_number - 1) tem_piece->size = uploading_torrent->file_size - 4096 * 1024 * i;
+                        else tem_piece->size = 4096 * 1024;
+                        tem_piece->location=torrent_file_name;
+                        uploading_torrent->pieces.push_back( tem_piece);
+                    }
+
                     // uploading_torrent->++;
                     printf("file_block_length = %d\n", file_block_length);
 
@@ -372,15 +608,6 @@ void  *pthread_client_console(void *ptr)
 
                     bzero(data_buf, sizeof(data_buf));
                 }
-                memset(uploading_torrent->bitfield, '0', sizeof(char)*300);
-                for (int i = 0; i < uploading_torrent->piece_number; i++){
-                    uploading_torrent->bitfield[i] = '1';
-                }
-                uploading_torrent->bitfield[uploading_torrent->piece_number] = '-1';
-                for (int i = 0; i < 300; i ++){
-                    cout << uploading_torrent->bitfield[i];
-                }
-                cout << endl;
                 fclose(fp);
                 printf("File:\t%s Transfer Finished!\n", torrent_file_name);
 
@@ -478,6 +705,7 @@ void  *pthread_client_console(void *ptr)
             torrent->torrent_size=parameters[i]["torrent_size"].asInt();
             torrent->torrent_name=parameters[i]["torrent_name"].asString();
             }
+            torrent->status = 0;
 
             get_torrent =  c_r_client.generate_request(CLIENT_REQUEST_TYPE.READY_TO_RECEIVE_TORRENT_FROM_SERVER,torrent);
             send(sockfd, get_torrent.c_str(),strlen(get_torrent.c_str()),0);
@@ -502,9 +730,10 @@ void  *pthread_client_console(void *ptr)
             string readline;
             getline(torrent_file_stream,readline);
             torrent->file_size = atoi(readline.c_str());
+            printf("torrent file_size is %d\n", torrent->file_size);
             getline(torrent_file_stream,readline);
             torrent->piece_number=atoi(readline.c_str());
-            memset(torrent->bitfield, '0', sizeof(char)*300);
+            printf("torrent piece number is %d\n", torrent->piece_number);
             for(int i = 0; i < torrent->piece_number; i++)
             {
                 T_TORRENT_PIECE* piece = new T_TORRENT_PIECE;
@@ -620,19 +849,20 @@ void  *pthread_client_console(void *ptr)
             {
 
                 cout<< "\t ["<<((T_TORRENT *)torrents.at(i))->torrent_id<< "] \t"<<((T_TORRENT *)torrents.at(i))->torrent_name<< "\t"<<((T_TORRENT *)torrents.at(i))->torrent_size<<"\t  "
-                    << "\t  "<<     ((T_TORRENT *)torrents.at(i))->status <<"\t"<<((T_TORRENT *)torrents.at(i))->piece_number<<"\t  "
+                    << "\t  "<<   ((T_TORRENT *)torrents.at(i))->piece_number  <<"\t"<< ((T_TORRENT *)torrents.at(i))->status<<"\t  "
                     <<"\t "<<((T_TORRENT *)torrents.at(i))->file_size <<endl;
 
                 cout<<"<================= pieces done=================>\n";
                 for(int j=0;j<((T_TORRENT *)torrents.at(i))->piece_number;j++)
                 {
                     cout<<"\t   piece order"<<(T_TORRENT_PIECE *)(((T_TORRENT *)torrents.at(i))->pieces.at(j)) ->order<<"\t  "
-                       <<"\t    piece done"<<(T_TORRENT_PIECE *)(((T_TORRENT *)torrents.at(i))->pieces.at(j))->done<<"\t  "<<endl;
+                       <<"\t    piece done"<<(T_TORRENT_PIECE *)(((T_TORRENT *)torrents.at(i))->pieces.at(j))->done<<"\t  "
+                         <<"\t    piece done"<<(T_TORRENT_PIECE *)(((T_TORRENT *)torrents.at(i))->pieces.at(j))->size<<"\t  "<<endl;
                 }
                 cout<<endl;
                 cout<<endl;
             }
-
+            downloader();
 
         }
     }

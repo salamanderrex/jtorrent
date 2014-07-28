@@ -177,6 +177,8 @@ public:
             T_TORRENT *  torrent= (T_TORRENT *)c_info_base;
              parameter["torrent_id"]=torrent->torrent_id;
              parameter["torrent_SHA"]=torrent->torrent_SHA;
+             parameter["torrent_downloader"]=user_name;
+             parameter["torrent_port"]=CLIENT_PORT;
              parameters.append(parameter);
              root["request_type"]=type;
              root["parameters"]=parameters;
@@ -396,9 +398,10 @@ public:
                 parameter["torrent_port"]=user->port;
                 parameter["user_name"]=user->user_name;
                 parameter["user_ip"]=user->user_ip;
+                  parameters.append(parameter);
             }
 
-            parameters.append(parameter);
+
             root["reponse_type"]=type;
             root["parameters"]=parameters;
             root["torrent_id"]=peer_list->torrent_id;

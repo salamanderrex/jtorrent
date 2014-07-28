@@ -81,7 +81,8 @@ server response
 $~{"response_tye":41,"parameters":[{"torrent_id":1,"torrent_SHA":"thisissha","torrent_size":45,"torrent_name":"1.avi.torrent"}]}~$
 
 client 
-$~{"request_tye":16,"parameters":[{"torrent_id":1},{"torrent_SHA":"thisissha"}]}~$
+//the resaon here 
+$~{"request_tye":16,"parameters":[{"torrent_id":1},{"torrent_SHA":"thisissha"},{"torrent_downloader":"zqu"},{"torrent_port":1235}]}~$
 
 READY_TO_RECEIVE_TORRENT_FROM_SERVER:16
 

@@ -368,14 +368,29 @@ fwrite(buff,1,n,fp);
                                 cout<<"a client want a torrent"<<endl;
                                 Json::Value parameters=jroot["parameters"];
                                 int j = 0;
+                                  user_info * new_downloader_info=new user_info;
+                                  T_TORRENT * torrent;
                                 for(int i=0;i<parameters.size();i++)
                                 {
                                     if(parameters[i].isMember("torrent_id"))
                                     {
                                         j=parameters[i]["torrent_id"].asInt();
+                                        torrent=(T_TORRENT *) torrents.at(j-1);
+                                        //add this new guy into the peer list
+                                        new_downloader_info->user_ip=inet_ntoa(client[i].addr.sin_addr);
+                                        new_downloader_info->port=parameters[i]["torrent_port"].asInt();
+                                        new_downloader_info->user_name=parameters[i]["torrent_downloader"].asString();
+                                       torrent->peer_list->uploader_list.push_back(new_downloader_info);
+
+                                       cout<<endl<<"add new downloader to peerlist"<<new_downloader_info->user_name<<endl;
+
                                     }
+
+
                                 }
-                                T_TORRENT * torrent=(T_TORRENT *) torrents.at(j-1);
+
+
+
                                  FILE* fp;
                                  char data_buf[MAX_DATABUF + 1];
                                  fp = fopen(torrent->torrent_name.c_str(), "rb");
@@ -389,6 +404,10 @@ fwrite(buff,1,n,fp);
                                  }
                                  bzero(data_buf, sizeof(data_buf));
                                  }
+
+
+
+
                                  fclose(fp);
                                  }
 

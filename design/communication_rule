@@ -138,7 +138,7 @@ $~{"response_type":91,"parameters":[{"torrent_id":1,"p_index":1,"begin":0,"block
 
 
 then client downloader request  C_C_REQUESR_REQUEST_1=20
-$~{"request_type":20,"parameters":[{"torrent_id":1,"p_index":1,"begin":0,"block_length":4194304}]}~$
+$~{"request_type":20,"parameters":[{"torrent_id":1,"p_index":2,"begin":0,"block_length":4194304}]}~$
 
 then uploader response data
 

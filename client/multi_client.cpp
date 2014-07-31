@@ -155,6 +155,8 @@ int main(int argc, char** argv)
 {
 
 
+    cout<<"user Name:";
+    cin>>c_r_client.user_name;
     //create the therad
     pthread_t id;
     int ret;

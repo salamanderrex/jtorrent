@@ -136,10 +136,13 @@ void *pthread_uploader(void *ptr)
             T_TORRENT_PIECE* piece =  torrent->pieces.at(parameters[j]["p_index"].asInt() - 1);
             char data_buf[MAXBUF * 4096 + 1];
             FILE *fp;
-            fp = fopen(torrent->file_name.c_str(), "rb");
+            if(torrent->status == 1) fp = fopen(torrent->file_name.c_str(), "rb");
+            else fp = fopen(piece->location.c_str(), "rb");
             int file_block_length = 0;
-            cout <<torrent->file_name<<" "<< piece->order << endl;
-            for(int i = 0; i < piece->order; i++) file_block_length = fread(data_buf, 1, MAX_DATABUF * 1024, fp);
+            if(torrent->status == 1) cout <<torrent->file_name<<" "<< piece->order << endl;
+            else cout <<piece->location<<" "<< piece->order << endl;
+            if(torrent->status == 1) for(int i = 0; i < piece->order; i++) file_block_length = fread(data_buf, 1, MAX_DATABUF * 1024, fp);
+            else file_block_length = fread(data_buf, 1, MAX_DATABUF * 1024, fp);
             cout<<file_block_length<<endl;
             send(psockfd, data_buf, file_block_length, 0);
         }
@@ -337,14 +340,20 @@ int main(int argc, char** argv)
                                 std::cout<<"finish receive instruction from client"<<endl;
                             }
                             pthread_t id1;
+                            void * retval;
                             int ret1;
                             tempsockfd = sockfd;
                             ret1=pthread_create(&id1,NULL,pthread_uploader,NULL);
-                            if(ret!=0){
+                            if(ret1!=0){
                             printf ("Create pthread error!\n");
                             exit (1);
                             }
-
+                            int err;
+                            err = pthread_join(id1, &retval);
+                            if (err != 0){
+                                printf("can't join with thread: %d\n", i);
+                                exit(0);
+                            }
 
                         }
                         else

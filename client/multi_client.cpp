@@ -41,6 +41,8 @@ int main(int argc, char** argv)
 
     cout<<"user Name:";
     cin>>c_r_client.user_name;
+         cout<<endl<<"port :";
+    cin>>CLIENT_PORT;
     //create the therad
     pthread_t id;
     int ret;
@@ -316,10 +318,13 @@ int main(int argc, char** argv)
                                     T_TORRENT_PIECE* piece =  torrent->pieces.at(parameters[j]["p_index"].asInt() - 1);
                                     char data_buf[MAXBUF * 4096 + 1];
                                     FILE *fp;
-                                    fp = fopen(torrent->file_name.c_str(), "rb");
+                                    cout<<piece->location<<endl;
+                                    if(torrent->status == 0) fp = fopen(piece->location.c_str(),"rb");
+                                    else fp = fopen(torrent->file_name.c_str(), "rb");
                                     int file_block_length = 0;
                                     cout <<torrent->file_name<<" "<< piece->order << endl;
-                                    for(int i = 0; i < piece->order; i++) file_block_length = fread(data_buf, 1, MAX_DATABUF * 1024, fp);
+                                    if(torrent->status == 0) for(int i = 0; i < piece->order; i++) file_block_length = fread(data_buf, 1, MAX_DATABUF * 1024, fp);
+                                    else file_block_length = fread(data_buf, 1, MAX_DATABUF * 1024, fp);
                                     cout<<file_block_length<<endl;
                                     send(sockfd, data_buf, file_block_length, 0);
                                 }

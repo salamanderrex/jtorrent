@@ -20,10 +20,10 @@ it will use xterm to open
 
 how to use
 ---------------------------------
-##server
+###server
 just run
 
-##client
+###client
 input user name and port, and then follow the panel(input should be correct)
 
 
@@ -35,11 +35,11 @@ in the design floder
 
 library
 --------------------------------------------
-##jsoncpp(32bit and 64 bit) 
+###jsoncpp(32bit and 64 bit) 
 if you are under the 32-bit, you should copy libjsoncpp.so
 if you are under the 64-bit, you should copy libjson_linux-gcc-4.6_libmt.so
 (copy the corresponding .so file to the directory /usr/local/lib/)
-NOTICE: in order to let qt to load, you should change .pro file, unix:!macx: LIBS += -L$$PWD/../lib/ -ljsoncpp,
+#NOTICE: in order to let qt to load, you should change .pro file, unix:!macx: LIBS += -L$$PWD/../lib/ -ljsoncpp,
  change to specific name,  example , if you rename to libjson.cpp then should change -ljsoncpp to -ljson
  
-##SHA-1
+###SHA-1

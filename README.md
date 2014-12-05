@@ -26,6 +26,7 @@ In order to avoid this problem, you can delete the `.pro.user` file and re-open 
 
 ###Run in the terminal 
 In order to run in the terminal and get input, you need to modify the configuration of the qt creator.(Because Qt creator does not support the terminal console in Ubuntu)
+
 	open the qt creator
 	change System/Terminal: /usr/bin/xterm -e)
 	in run setting, set it to the "run in terminal" option,
@@ -50,9 +51,12 @@ There is a document in the `Algorithm` folder . You can check it in details.
 Libraries used
 --------------------------------------------
 * `jsoncpp` (32bit and 64 bit) 
+
 if you are under the 32-bit, you should copy libjsoncpp.so
 if you are under the 64-bit, you should copy libjson_linux-gcc-4.6_libmt.so
 (copy the corresponding .so file to the directory /usr/local/lib/)
+
 	NOTICE: in order to let qt to load, you should change .pro file, unix:!macx: LIBS += -L$$PWD/../lib/ -ljsoncpp,
 	change to specific name,  example , if you rename to libjson.cpp then should change -ljsoncpp to -ljson
-*SHA-1
+	
+* `SHA-1`
